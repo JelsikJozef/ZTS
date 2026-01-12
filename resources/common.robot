@@ -335,3 +335,48 @@ Input Website For Profile
 Input Phone For Profile
     [Arguments]    ${phone}
     Input Phone    ${phone}
+
+###############################################################################
+# LOGIN – portaladmin
+###############################################################################
+
+Login As Portaladmin
+    Login Local    ${USER_PORTALADMIN}    ${PASS_PORTALADMIN}
+
+###############################################################################
+# INFO WEB / SUBJECTS
+###############################################################################
+
+Open Info Web Tab
+    [Documentation]    Otvorí záložku Informačný web (rozbalí položku v bočnom menu).
+    Wait Until Element Is Visible    ${TAB_INFOWEB}    20s
+    Scroll Element Into View         ${TAB_INFOWEB}
+    Click Element                    ${TAB_INFOWEB}
+    Sleep    500ms
+
+Open Manage Subjects
+    [Documentation]    Klikne na Spravovať predmety a čaká na načítanie zoznamu.
+    Wait Until Element Is Visible    ${LINK_MANAGE_SUBJECTS}    20s
+    Scroll Element Into View         ${LINK_MANAGE_SUBJECTS}
+    Click Element                    ${LINK_MANAGE_SUBJECTS}
+
+Open Add New Subject Form
+    [Documentation]    Klikne na Pridať nový predmet.
+    Wait Until Element Is Visible    ${BTN_ADD_NEW_SUBJECT}    20s
+    Scroll Element Into View         ${BTN_ADD_NEW_SUBJECT}
+    Click Element                    ${BTN_ADD_NEW_SUBJECT}
+
+Submit Empty Subject
+    [Documentation]    Stlačí Pridať predmet bez vyplnenia polí.
+    Wait Until Element Is Visible    ${BTN_SUBMIT_SUBJECT}    20s
+    Scroll Element Into View         ${BTN_SUBMIT_SUBJECT}
+    Click Element                    ${BTN_SUBMIT_SUBJECT}
+
+Verify Subject Empty Fields Errors
+    [Documentation]    Overí, že sa zobrazila validačná chyba na prázdne polia.
+    ${has_err}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_SUBJECT_REQUIRED}    8s
+    IF    ${has_err}
+        Page Should Contain Element    ${ERR_SUBJECT_REQUIRED}
+    ELSE
+        Take Screenshot On Failure    Očakával som validačnú chybu pri prázdnych poliach predmetu, ale nezobrazila sa.
+    END

@@ -66,3 +66,12 @@ ${INPUT_ARTICLE_TITLE}      xpath=//input[@formcontrolname='title' or @name='tit
 ${INPUT_ARTICLE_CONTENT}    xpath=//textarea[@formcontrolname='content' or @name='content' or @id='content' or @aria-label='Obsah' or @aria-label='Content'] | //label[normalize-space(.)='Obsah']/following::textarea[1] | //div[contains(@class,'ql-editor')]
 ${BTN_SAVE_ARTICLE}         xpath=//button[.//span[normalize-space(.)='Uložiť zmeny'] or .//span[normalize-space(.)='Uložiť zmeny'] or .//span[normalize-space(.)='Odoslať'] or normalize-space(.)='Uložiť zmeny' or normalize-space(.)='Uložiť zmeny' or normalize-space(.)='Odoslať']
 ${ERR_ARTICLE_EMPTY}        xpath=//mat-error | //*[contains(@class,'error') or contains(@class,'alert') or contains(@class,'invalid')][1]
+
+# =============================================================================
+# INFO WEB / SUBJECTS
+# =============================================================================
+${TAB_INFOWEB}              xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Informačný web']]//div[contains(@class,'fuse-vertical-navigation-item-title-wrapper')]
+${LINK_MANAGE_SUBJECTS}     xpath=//div[contains(@class,'fuse-vertical-navigation-item-children')]//*[self::a or self::button][.//span[contains(normalize-space(.),'Spravovať predmety')]] | //a[(contains(@href,'subject') or contains(@href,'predmet')) and (contains(normalize-space(.),'Spravovať') or contains(normalize-space(.),'predmet'))] | //button[contains(normalize-space(.),'Spravovať predmety')]
+${BTN_ADD_NEW_SUBJECT}      xpath=//button[.//span[normalize-space(.)='Pridať nový predmet'] or normalize-space(.)='Pridať nový predmet'] | //a[contains(@href,'new-subject') or contains(@href,'add-subject')]
+${BTN_SUBMIT_SUBJECT}       xpath=//button[.//span[normalize-space(.)='Pridať predmet'] or normalize-space(.)='Pridať predmet']
+${ERR_SUBJECT_REQUIRED}     xpath=//mat-error | //*[contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'prazdne') or contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'povinne') or contains(translate(normalize-space(.),'REQUIRED','required'),'required')][1]

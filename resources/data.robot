@@ -23,3 +23,4 @@ ${USER_PORTALADMIN}    portaladmin
 ${PASS_PORTALADMIN}    nimdalatrop
 ${EMOJI}               🙏
 ${ABOUT_TEXT}          Test emoji ${EMOJI}
+${MSG_SUBJECT_REQUIRED}    povinné

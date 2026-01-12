@@ -165,6 +165,25 @@ Verify Phone Was Saved Bug
     Capture Page Screenshot
 
 ###############################################################################
+# PROFIL – Email
+###############################################################################
+
+Input Email
+    [Arguments]    ${email}
+    Wait Until Element Is Visible    ${INPUT_EMAIL}    20s
+    Clear Element Text               ${INPUT_EMAIL}
+    Input Text                       ${INPUT_EMAIL}    ${email}
+
+Verify Invalid Email Message
+    [Documentation]    Očakáva validačnú chybu pre neplatný email.
+    ${has_err}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_EMAIL}    8s
+    IF    ${has_err}
+        Page Should Contain Element    ${ERR_EMAIL}
+    ELSE
+        Take Screenshot On Failure    Očakával som validačnú chybu pre email, ale nezobrazila sa.
+    END
+
+###############################################################################
 # PROFIL – Miestnosť
 ###############################################################################
 

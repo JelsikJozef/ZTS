@@ -14,6 +14,8 @@ ${VALID_PHONE}    0912345678
 
 ${INVALID_ROOM}         Hore
 ${MSG_ROOM_INVALID}     nesprávny formát
+${INVALID_EMAIL}        admin1
+${MSG_EMAIL_INVALID}    nesprávna adresa
 
 ${USER_PORTALADMIN}    portaladmin
 ${PASS_PORTALADMIN}    nimdalatrop

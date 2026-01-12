@@ -33,6 +33,10 @@ ${MENU_SETTINGS}    xpath=//a[@mat-menu-item and @href='/settings' and .//span[n
 # input Webstránka (label "Webstránka")
 ${INPUT_WEBSITE}    xpath=//label[normalize-space(.)='Webstránka']/following::input[1]
 
+# input Email (label "Email")
+${INPUT_EMAIL}    xpath=//label[normalize-space(.)='Email']/following::input[1]
+${ERR_EMAIL}      xpath=//label[normalize-space(.)='Email']/following::*[contains(@class,'mat-error') or self::mat-error][1]
+
 # =============================================================================
 # SETTINGS / PROFIL – Miestnosť
 # =============================================================================

@@ -12,6 +12,9 @@ ${INVALID_PHONE_SHORT}    67
 ${VALID_PHONE}    0912345678
 
 
+${INVALID_ROOM}         Hore
+${MSG_ROOM_INVALID}     nesprávny formát
+
 ${USER_PORTALADMIN}    portaladmin
 ${PASS_PORTALADMIN}    nimdalatrop
 ${EMOJI}               🙏

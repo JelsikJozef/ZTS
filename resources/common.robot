@@ -165,31 +165,82 @@ Verify Phone Was Saved Bug
     Capture Page Screenshot
 
 ###############################################################################
-# PROFIL – O mne (Emoji)  (fix na "ChromeDriver only supports BMP")
+# PROFIL – Miestnosť
 ###############################################################################
 
-Input About Me
-    [Arguments]    ${text}
+Input Room
+    [Arguments]    ${room}
+    Wait Until Element Is Visible    ${INPUT_ROOM}    20s
+    Clear Element Text               ${INPUT_ROOM}
+    Input Text                       ${INPUT_ROOM}    ${room}
 
+Verify Room Format Error
+    [Documentation]    Očakáva validačnú chybu pri zlom formáte miestnosti.
+    ${has_err}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_ROOM}    8s
+    IF    ${has_err}
+        Page Should Contain Element    ${ERR_ROOM}
+    ELSE
+        # BUG path – chyba sa nezobrazila
+        Take Screenshot On Failure    Očakával som validačnú chybu pre miestnosť, ale žiadna sa nezobrazila.
+    END
+
+###############################################################################
+# PROFIL – helpery
+###############################################################################
+
+Get About Me Locator
+    [Documentation]    Vyberie locator pre pole "O mne" (preferuje textarea, fallback input).
     ${has_ta}=    Run Keyword And Return Status    Page Should Contain Element    ${INPUT_ABOUT_ME_TEXTAREA}
     IF    ${has_ta}
         ${locator}=    Set Variable    ${INPUT_ABOUT_ME_TEXTAREA}
     ELSE
         ${locator}=    Set Variable    ${INPUT_ABOUT_ME_INPUT}
     END
+    Wait Until Element Is Visible    ${locator}    20s
+    RETURN    ${locator}
 
+Python Repr
+    [Arguments]    ${text}
+    ${repr}=    Evaluate    repr($text)
+    RETURN    ${repr}
+
+Set Element Value With Events
+    [Documentation]    Nastaví value cez JS (podporuje non-BMP emoji) a vyvolá input/change/blur, aby Angular/Material zmenu zaregistroval.
+    [Arguments]    ${locator}    ${text}
     ${xp}=    Replace String    ${locator}    xpath=    ${EMPTY}
 
-    ${js}=    Catenate    SEPARATOR=\n
+    ${driver}=    Evaluate    __import__('robot.libraries.BuiltIn', fromlist=['BuiltIn']).BuiltIn().get_library_instance('SeleniumLibrary').driver
+
+    ${script}=    Catenate    SEPARATOR=\n
     ...    var xp = arguments[0];
     ...    var val = arguments[1];
     ...    var el = document.evaluate(xp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-    ...    if(!el){ throw new Error("ABOUT_ME element not found for XPath: " + xp); }
+    ...    if(!el){ throw new Error('ABOUT_ME element not found for XPath: ' + xp); }
+    ...    el.focus();
     ...    el.value = val;
     ...    el.dispatchEvent(new Event('input', {bubbles:true}));
     ...    el.dispatchEvent(new Event('change', {bubbles:true}));
+    ...    el.dispatchEvent(new Event('blur', {bubbles:true}));
 
-    Execute Javascript    ${js}    ${xp}    ${text}
+    Call Method    ${driver}    execute_script    ${script}    ${xp}    ${text}
+
+Wait For Save To Finish
+    [Documentation]    Po kliknutí na "Uložiť zmeny" čaká, kým sa UI ustáli (spinner zmizne alebo aspoň krátky stabilizačný wait).
+    ${has_spinner}=    Run Keyword And Return Status    Page Should Contain Element    css=mat-progress-spinner,css=.mat-mdc-progress-spinner
+    IF    ${has_spinner}
+        Wait Until Page Does Not Contain Element    css=mat-progress-spinner,css=.mat-mdc-progress-spinner    20s
+    ELSE
+        Sleep    300ms
+    END
+
+###############################################################################
+# PROFIL – O mne (Emoji)  (fix na "ChromeDriver only supports BMP")
+###############################################################################
+
+Input About Me
+    [Arguments]    ${text}
+    ${locator}=    Get About Me Locator
+    Set Element Value With Events    ${locator}    ${text}
 
 Verify About Me Saved
     [Arguments]    ${expected}
@@ -197,22 +248,29 @@ Verify About Me Saved
     Reload Page
     Wait Until Page Contains    Nastavenia    20s
 
-    ${has_ta}=    Run Keyword And Return Status    Page Should Contain Element    ${INPUT_ABOUT_ME_TEXTAREA}
-    IF    ${has_ta}
-        ${locator}=    Set Variable    ${INPUT_ABOUT_ME_TEXTAREA}
-    ELSE
-        ${locator}=    Set Variable    ${INPUT_ABOUT_ME_INPUT}
-    END
-
+    ${locator}=    Get About Me Locator
     ${xp}=    Replace String    ${locator}    xpath=    ${EMPTY}
 
-    ${js}=    Catenate    SEPARATOR=\n
+    ${driver}=    Evaluate    __import__('robot.libraries.BuiltIn', fromlist=['BuiltIn']).BuiltIn().get_library_instance('SeleniumLibrary').driver
+    ${script}=    Catenate    SEPARATOR=\n
     ...    var xp = arguments[0];
     ...    var el = document.evaluate(xp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     ...    if(!el){ return null; }
     ...    return el.value;
 
-    ${val}=    Execute Javascript    ${js}    ${xp}
+    ${val}=    Call Method    ${driver}    execute_script    ${script}    ${xp}
+
     Should Be Equal    ${val}    ${expected}
     Capture Page Screenshot
 
+###############################################################################
+# PROFIL – Webstránka / Telefón (drobné aliasy pre kompatibilitu testov)
+###############################################################################
+
+Input Website For Profile
+    [Arguments]    ${website}
+    Input Website    ${website}
+
+Input Phone For Profile
+    [Arguments]    ${phone}
+    Input Phone    ${phone}

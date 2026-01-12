@@ -1,45 +1,28 @@
 *** Settings ***
 Library    SeleniumLibrary
 Library    BuiltIn
+Library    String
 Resource   ./locators.robot
 Resource   ./data.robot
-
-
 
 *** Variables ***
 ${BROWSER}    chrome
 
-
 *** Keywords ***
 ###############################################################################
-# ZÁKLAD: spoločné otvorenie/zatvorenie + ochrana proti Chrome popupom
+# BROWSER / ZÁKLAD
 ###############################################################################
 
-# (spoločné pre všetky TestSem)
-Open Sign In Page
-    Open Chrome Browser Safely
-    Go To    ${SIGNIN_URL}
-    Wait Until Page Contains    Prihlásiť sa    20s
-
-# (spoločné pre všetky TestSem)
-Open Home Page
-    Go To    ${BASE_URL}
-    Wait Until Page Contains    Aktuality    20s
-
-# (spoločné pre všetky TestSem)
-Close Browser Session
-    Close Browser
-
-# (spoločné pre všetky TestSem) – zavrie Chrome “Zmeňte heslo” popup, ak sa objaví
 Open Chrome Browser Safely
-      ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+    # Vytvor ChromeOptions cez Evaluate (bez potreby extra importov)
+    ${options}=    Evaluate    __import__('selenium.webdriver').webdriver.ChromeOptions()
 
-    # znižuje rušivé okná
+    # menej rušivých okien
     Call Method    ${options}    add_argument    --disable-notifications
     Call Method    ${options}    add_argument    --disable-infobars
     Call Method    ${options}    add_argument    --disable-popup-blocking
 
-    # vypnutie password manageru + leak detection cez prefs
+    # vypnúť password manager + leak detection
     ${prefs}=    Create Dictionary
     ...    credentials_enable_service=${False}
     ...    profile.password_manager_enabled=${False}
@@ -49,20 +32,34 @@ Open Chrome Browser Safely
     Create Webdriver    Chrome    options=${options}
     Maximize Browser Window
 
+Open Sign In Page
+    Open Chrome Browser Safely
+    Go To    ${SIGNIN_URL}
+    Wait Until Page Contains    Prihlásiť sa    20s
+
+Open Home Page
+    Go To    ${BASE_URL}
+    Wait Until Page Contains    Aktuality    20s
+
+Close Browser Session
+    Close Browser
+
+Take Screenshot On Failure
+    [Arguments]    ${msg}
+    Capture Page Screenshot
+    Fail    ${msg}
+
 ###############################################################################
-# PRIHLASENIE – lokálny účet (TestSem1–TestSem3 + použije sa aj pred profilom)
+# LOGIN – lokálny účet (TC01–TC03)
 ###############################################################################
 
-# Použitie: TestSem1, TestSem2, TestSem3, TestSem4 (setup login)
 Select Local Account Login
     Wait Until Element Is Visible    ${BTN_LOCAL_LOGIN}    20s
     Scroll Element Into View         ${BTN_LOCAL_LOGIN}
     Click Element                    ${BTN_LOCAL_LOGIN}
+    Wait Until Page Contains         ${TXT_USERNAME_LABEL}    20s
+    Wait Until Page Contains         ${TXT_PASSWORD_LABEL}    20s
 
-    Wait Until Page Contains    ${TXT_USERNAME_LABEL}    20s
-    Wait Until Page Contains    ${TXT_PASSWORD_LABEL}    20s
-
-# Použitie: TestSem1–TestSem3, TestSem4
 Input Username
     [Arguments]    ${username}
     ${inp}=    Set Variable    xpath=//*[contains(normalize-space(.),'${TXT_USERNAME_LABEL}')]/following::input[1]
@@ -70,7 +67,6 @@ Input Username
     Clear Element Text               ${inp}
     Input Text                       ${inp}    ${username}
 
-# Použitie: TestSem1–TestSem3, TestSem4
 Input Password
     [Arguments]    ${password}
     ${inp}=    Set Variable    xpath=//*[contains(normalize-space(.),'${TXT_PASSWORD_LABEL}')]/following::input[1]
@@ -78,101 +74,75 @@ Input Password
     Clear Element Text               ${inp}
     Input Text                       ${inp}    ${password}
 
-# Použitie: TestSem1–TestSem3, TestSem4
 Submit Local Login
     Wait Until Element Is Visible    ${BTN_SUBMIT_LOCAL}    20s
     Scroll Element Into View         ${BTN_SUBMIT_LOCAL}
     Click Element                    ${BTN_SUBMIT_LOCAL}
 
-# Použitie: TestSem1 (prázdne meno+heslo)
-Verify Required Messages (Empty Username And Password)
+Login Local
+    [Arguments]    ${username}    ${password}
+    Select Local Account Login
+    Input Username    ${username}
+    Input Password    ${password}
+    Submit Local Login
+    Wait Until Page Contains    Aktuality    20s
+
+Verify Required Messages Empty Username And Password
     Wait Until Page Contains    ${MSG_USERNAME_REQUIRED}    20s
     Wait Until Page Contains    ${MSG_PASSWORD_REQUIRED}    20s
     Capture Page Screenshot
 
-# Použitie: TestSem2 (portaladmin bez hesla)
 Verify Password Required Message
     Wait Until Page Contains    ${MSG_PASSWORD_REQUIRED}    20s
     Capture Page Screenshot
 
-# Použitie: TestSem3 (portaladmin zlé heslo)
 Verify Wrong Credentials Message
     Wait Until Page Contains    Nesprávne používateľské meno alebo heslo    20s
     Capture Page Screenshot
 
-
 ###############################################################################
-# LOGIN FLOW PRE PROFILOVÉ TESTY – (TestSem4 a ďalšie profilové)
+# LOGIN FLOW PRE PROFILOVÉ TESTY
 ###############################################################################
 
-# Použitie: TestSem4 (a všetky ďalšie profilové testy)
 Login As Teacher
-    # Východisko: sme na /sign-in
-    Select Local Account Login
-    Input Username    ${USER_TEACHER}
-    Input Password    ${PASS_TEACHER}
-    Submit Local Login
-
-    # počkaj na domovskú stránku po logine
-    Wait Until Page Contains    Aktuality    20s
-    #Dismiss Chrome Password Popup If Present
-
+    Login Local    ${USER_TEACHER}    ${PASS_TEACHER}
 
 ###############################################################################
-# NAVIGÁCIA DO NASTAVENÍ – cez user menu (TestSem4 a ďalšie)
+# NAVIGÁCIA – Nastavenia
 ###############################################################################
 
-# Použitie: TestSem4
 Open Settings Via User Menu
-    #Dismiss Chrome Password Popup If Present
-
-    # 1) klik na ikonku user menu (tá čo si poslal HTML)
     Wait Until Element Is Visible    ${BTN_USER_MENU}    20s
     Click Element                    ${BTN_USER_MENU}
 
-    # 2) klik na "Nastavenia" v menu
     Wait Until Element Is Visible    ${MENU_SETTINGS}    20s
     Click Element                    ${MENU_SETTINGS}
 
-    # 3) over že sme na settings
     Wait Until Location Contains     /settings    20s
     Wait Until Page Contains         Nastavenia   20s
 
-# Použitie: TestSem4 – fallback, keby menu robilo problémy
 Open Settings Direct
     Go To    ${BASE_URL}settings
     Wait Until Location Contains    /settings    20s
     Wait Until Page Contains        Nastavenia   20s
 
-
 ###############################################################################
-# PROFIL – Webstránka (TestSem4)
+# PROFIL – Webstránka
 ###############################################################################
 
-# Použitie: TestSem4
 Input Website
     [Arguments]    ${website}
     Wait Until Element Is Visible    ${INPUT_WEBSITE}    20s
     Clear Element Text               ${INPUT_WEBSITE}
     Input Text                       ${INPUT_WEBSITE}    ${website}
 
-# Použitie: TestSem4
 Save Profile Changes
     Wait Until Element Is Visible    ${BTN_SAVE_CHANGES}    20s
     Scroll Element Into View         ${BTN_SAVE_CHANGES}
     Click Element                    ${BTN_SAVE_CHANGES}
 
 ###############################################################################
-# PROFIL – Telefón (TestSemXX)
-###############################################################################
-
-Input Phone Number
-    [Arguments]    ${phone}
-    Wait Until Element Is Visible    ${INPUT_PHONE}    20s
-    Clear Element Text               ${INPUT_PHONE}
-    Input Text                       ${INPUT_PHONE}    ${phone}
-###############################################################################
-# PROFIL – Telefón (krátke číslo)  (TestSem? / TC??)
+# PROFIL – Telefón
 ###############################################################################
 
 Input Phone
@@ -182,18 +152,67 @@ Input Phone
     Input Text                       ${INPUT_PHONE}    ${phone}
 
 Verify Phone Validation Error
-    # Ak aplikácia validuje, očakávame chybu.
-    # Zatiaľ genericky podľa textu (upraviť na presný text, keď ho zistíš v UI)
+    # ak validácia funguje, Angular Material typicky zobrazí mat-error
     Wait Until Page Contains Element    css=mat-error    10s
     Capture Page Screenshot
 
-Verify Phone Was Saved (Bug)
-    # Keďže u vás to v manuálnom teste vyšlo FAIL = bug (uložilo sa),
-    # tak tu overíme, že sa NEzobrazila chyba.
-    ${has_error}=    Run Keyword And Return Status    Page Should Contain    ${TXT_PHONE_ERROR_GENERIC}
+Verify Phone Was Saved Bug
+    # BUG reprodukcia: žiadna chyba sa neobjaví
+    ${has_error}=    Run Keyword And Return Status    Page Should Contain Element    css=mat-error
     IF    ${has_error}
-        Capture Page Screenshot
-        Fail    Očakával som, že chyba sa NEobjaví (podľa reality sa ukladá). Ale chyba sa objavila, správanie sa zmenilo.
+        Take Screenshot On Failure    Očakával som BUG (bez chyby), ale objavil sa mat-error – správanie sa zmenilo.
     END
+    Capture Page Screenshot
+
+###############################################################################
+# PROFIL – O mne (Emoji)  (fix na "ChromeDriver only supports BMP")
+###############################################################################
+
+Input About Me
+    [Arguments]    ${text}
+
+    ${has_ta}=    Run Keyword And Return Status    Page Should Contain Element    ${INPUT_ABOUT_ME_TEXTAREA}
+    IF    ${has_ta}
+        ${locator}=    Set Variable    ${INPUT_ABOUT_ME_TEXTAREA}
+    ELSE
+        ${locator}=    Set Variable    ${INPUT_ABOUT_ME_INPUT}
+    END
+
+    ${xp}=    Replace String    ${locator}    xpath=    ${EMPTY}
+
+    ${js}=    Catenate    SEPARATOR=\n
+    ...    var xp = arguments[0];
+    ...    var val = arguments[1];
+    ...    var el = document.evaluate(xp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    ...    if(!el){ throw new Error("ABOUT_ME element not found for XPath: " + xp); }
+    ...    el.value = val;
+    ...    el.dispatchEvent(new Event('input', {bubbles:true}));
+    ...    el.dispatchEvent(new Event('change', {bubbles:true}));
+
+    Execute Javascript    ${js}    ${xp}    ${text}
+
+Verify About Me Saved
+    [Arguments]    ${expected}
+
+    Reload Page
+    Wait Until Page Contains    Nastavenia    20s
+
+    ${has_ta}=    Run Keyword And Return Status    Page Should Contain Element    ${INPUT_ABOUT_ME_TEXTAREA}
+    IF    ${has_ta}
+        ${locator}=    Set Variable    ${INPUT_ABOUT_ME_TEXTAREA}
+    ELSE
+        ${locator}=    Set Variable    ${INPUT_ABOUT_ME_INPUT}
+    END
+
+    ${xp}=    Replace String    ${locator}    xpath=    ${EMPTY}
+
+    ${js}=    Catenate    SEPARATOR=\n
+    ...    var xp = arguments[0];
+    ...    var el = document.evaluate(xp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    ...    if(!el){ return null; }
+    ...    return el.value;
+
+    ${val}=    Execute Javascript    ${js}    ${xp}
+    Should Be Equal    ${val}    ${expected}
     Capture Page Screenshot
 

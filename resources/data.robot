@@ -9,4 +9,10 @@ ${INVALID_WEBSITE}  DobraStranka
 ${MSG_PHONE_INVALID}     Telefón má nesprávny formát
 ${MSG_SAVE_FAILED}       Údaje sa nepodarilo uložiť
 ${INVALID_PHONE_SHORT}    67
+${VALID_PHONE}    0912345678
 
+
+${USER_PORTALADMIN}    portaladmin
+${PASS_PORTALADMIN}    nimdalatrop
+${EMOJI}               🙏
+${ABOUT_TEXT}          Test emoji ${EMOJI}

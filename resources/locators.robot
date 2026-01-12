@@ -39,8 +39,11 @@ ${BTN_SAVE_CHANGES}    xpath=//button[normalize-space(.)='Uložiť zmeny' or .//
 # =============================================================================
 # SETTINGS / PROFIL – Telefón
 # =============================================================================
-${INPUT_PHONE}    xpath=//label[normalize-space(.)='Telefón']/following::input[1]
+
 
 ${ERR_PHONE}    xpath=//label[normalize-space(.)='Telefón']/following::*[contains(@class,'mat-error') or self::mat-error][1]
 ${INPUT_PHONE}    xpath=//label[normalize-space(.)='Telefón']/following::input[1]
 
+# O mne – zober textarea priamo po nadpise/texte "O mne"
+${INPUT_ABOUT_ME_TEXTAREA}    xpath=//*[normalize-space(.)='O mne']/following::textarea[1]
+${INPUT_ABOUT_ME_INPUT}       xpath=//*[normalize-space(.)='O mne']/following::input[1]

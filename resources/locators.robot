@@ -55,3 +55,14 @@ ${INPUT_PHONE}    xpath=//label[normalize-space(.)='Telefón']/following::input[
 # O mne – zober textarea priamo po nadpise/texte "O mne"
 ${INPUT_ABOUT_ME_TEXTAREA}    xpath=//*[normalize-space(.)='O mne']/following::textarea[1]
 ${INPUT_ABOUT_ME_INPUT}       xpath=//*[normalize-space(.)='O mne']/following::input[1]
+
+# =============================================================================
+# ARTICLES
+# =============================================================================
+${FIRST_ARTICLE_LINK}       xpath=(//a[contains(@href,'article') or contains(@href,'news')])[1]
+# širší výber edit tlačidla: aria-label, mat-icon edit, text "Upraviť"/"Editovať"
+${BTN_EDIT_ARTICLE}         xpath=//a[contains(@href,'/edit') and .//span[normalize-space(.)='Upraviť článok']] | //a[contains(@href,'/edit') and .//mat-icon[@data-mat-icon-name='pencil']] | //a[contains(@href,'/edit') and contains(normalize-space(.),'Upraviť článok')]
+${INPUT_ARTICLE_TITLE}      xpath=//input[@formcontrolname='title' or @name='title' or @id='title' or @aria-label='Názov' or @aria-label='Title'] | //label[normalize-space(.)='Názov']/following::input[1]
+${INPUT_ARTICLE_CONTENT}    xpath=//textarea[@formcontrolname='content' or @name='content' or @id='content' or @aria-label='Obsah' or @aria-label='Content'] | //label[normalize-space(.)='Obsah']/following::textarea[1] | //div[contains(@class,'ql-editor')]
+${BTN_SAVE_ARTICLE}         xpath=//button[.//span[normalize-space(.)='Uložiť zmeny'] or .//span[normalize-space(.)='Uložiť zmeny'] or .//span[normalize-space(.)='Odoslať'] or normalize-space(.)='Uložiť zmeny' or normalize-space(.)='Uložiť zmeny' or normalize-space(.)='Odoslať']
+${ERR_ARTICLE_EMPTY}        xpath=//mat-error | //*[contains(@class,'error') or contains(@class,'alert') or contains(@class,'invalid')][1]

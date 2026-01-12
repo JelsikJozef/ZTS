@@ -16,6 +16,8 @@ ${INVALID_ROOM}         Hore
 ${MSG_ROOM_INVALID}     nesprávny formát
 ${INVALID_EMAIL}        admin1
 ${MSG_EMAIL_INVALID}    nesprávna adresa
+${USER_ARTICLESEDITOR}    portaladmin
+${PASS_ARTICLESEDITOR}    nimdalatrop
 
 ${USER_PORTALADMIN}    portaladmin
 ${PASS_PORTALADMIN}    nimdalatrop

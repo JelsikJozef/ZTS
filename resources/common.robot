@@ -283,6 +283,48 @@ Verify About Me Saved
     Capture Page Screenshot
 
 ###############################################################################
+# LOGIN – články editor
+###############################################################################
+
+Login As Articles Editor
+    Login Local    ${USER_ARTICLESEDITOR}    ${PASS_ARTICLESEDITOR}
+
+###############################################################################
+# ARTICLES
+###############################################################################
+
+Open First Article From Home
+    [Documentation]    Otvorí prvý článok z hlavnej stránky (fallback podľa href obsahujúceho article/news).
+    Open Home Page
+    Wait Until Element Is Visible    ${FIRST_ARTICLE_LINK}    20s
+    Click Element                    ${FIRST_ARTICLE_LINK}
+
+Open Article Edit
+    Wait Until Element Is Visible    ${BTN_EDIT_ARTICLE}    20s
+    Scroll Element Into View         ${BTN_EDIT_ARTICLE}
+    Click Element                    ${BTN_EDIT_ARTICLE}
+
+Clear Article Title And Content
+    Wait Until Element Is Visible    ${INPUT_ARTICLE_TITLE}    20s
+    Clear Element Text               ${INPUT_ARTICLE_TITLE}
+    Wait Until Element Is Visible    ${INPUT_ARTICLE_CONTENT}    20s
+    Clear Element Text               ${INPUT_ARTICLE_CONTENT}
+
+Save Article
+    Wait Until Element Is Visible    ${BTN_SAVE_ARTICLE}    20s
+    Scroll Element Into View         ${BTN_SAVE_ARTICLE}
+    Click Element                    ${BTN_SAVE_ARTICLE}
+
+Verify Article Empty Error
+    [Documentation]    Očakáva validačnú chybu pre prázdny článok / povinné polia.
+    ${has_err}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_ARTICLE_EMPTY}    8s
+    IF    ${has_err}
+        Page Should Contain Element    ${ERR_ARTICLE_EMPTY}
+    ELSE
+        Take Screenshot On Failure    Očakával som validačnú chybu pri prázdnom článku, ale nezobrazila sa.
+    END
+
+###############################################################################
 # PROFIL – Webstránka / Telefón (drobné aliasy pre kompatibilitu testov)
 ###############################################################################
 

@@ -37,3 +37,10 @@ ${SUBJ_GUARANT_ZERO}    doc. Ing. Miroslav Kvaššay, PhD.
 ${SUBJ_HOURS_ZERO}    125
 ${SUBJ_CREDITS_ZERO}    0
 ${MSG_CREDITS_INVALID}    kredity
+
+${SUBJ_NAME_NONNUM_HOURS}      Krátky predmet
+${SUBJ_CODE_NONNUM_HOURS}      918200000
+${SUBJ_GUARANT_NONNUM_HOURS}   Ja nie
+${SUBJ_HOURS_NONNUM}           Aspoň jedna
+${SUBJ_CREDITS_OK}             5
+${MSG_HOURS_INVALID}           Počet hodín

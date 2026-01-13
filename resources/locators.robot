@@ -78,6 +78,7 @@ ${INPUT_SUBJECT_NAME}       xpath=//input[@formcontrolname='name' or @name='name
 ${INPUT_SUBJECT_CODE}       xpath=//input[@formcontrolname='code' or @name='code' or @id='code' or @aria-label='Kód'] | //label[normalize-space(.)='Kód']/following::input[1]
 ${INPUT_SUBJECT_GUARANT}    xpath=//input[@formcontrolname='guarant' or @name='guarant' or @id='guarant' or @aria-label='Garant'] | //label[normalize-space(.)='Garant']/following::input[1]
 ${INPUT_SUBJECT_HOURS}      xpath=//input[@formcontrolname='hours' or @name='hours' or @id='hours' or @aria-label='Počet hodín'] | //label[normalize-space(.)='Počet hodín']/following::input[1]
+${ERR_SUBJECT_HOURS}       xpath=//label[normalize-space(.)='Počet hodín']/following::*[contains(@class,'mat-error') or self::mat-error][1] | //mat-error[contains(translate(normalize-space(.),'HODIN','hodin'),'hodin')]
 ${INPUT_SUBJECT_CREDITS}    xpath=//input[@formcontrolname='credits' or @name='credits' or @id='credits' or @aria-label='Kredity'] | //label[normalize-space(.)='Kredity']/following::input[1]
 ${ERR_SUBJECT_CREDITS}      xpath=//label[normalize-space(.)='Kredity']/following::*[contains(@class,'mat-error') or self::mat-error][1] | //mat-error[contains(translate(normalize-space(.),'KREDITY','kredity'),'kred')]
 

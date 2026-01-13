@@ -481,3 +481,13 @@ Verify Credits Must Be Greater Than Zero Error
     ELSE
         Take Screenshot On Failure    Očakával som validačnú chybu pre kredity > 0, ale neobjavila sa (BUG).
     END
+
+Verify Hours Must Be Numeric Error
+    [Documentation]    Očakáva validačnú chybu pre pole Počet hodín; ak sa neobjaví, reportuje BUG.
+    ${err_visible}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_SUBJECT_HOURS}    8s
+    IF    ${err_visible}
+        Page Should Contain Element    ${ERR_SUBJECT_HOURS}
+    ELSE
+        Take Screenshot On Failure    Očakával som validačnú chybu pre Počet hodín (nečíselná hodnota), ale neobjavila sa (BUG).
+    END
+

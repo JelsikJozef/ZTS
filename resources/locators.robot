@@ -89,6 +89,7 @@ ${LINK_MANAGE_EMPLOYEES}    xpath=//div[contains(@class,'fuse-vertical-navigatio
 ${BTN_ADD_NEW_EMPLOYEE}     xpath=//button[.//span[normalize-space(.)='Pridať nového zamestnanca'] or normalize-space(.)='Pridať nového zamestnanca'] | //a[contains(@href,'new-employee') or contains(@href,'add-employee')]
 ${BTN_SUBMIT_EMPLOYEE}      xpath=//button[.//span[normalize-space(.)='Pridať zamestnanca'] or normalize-space(.)='Pridať zamestnanca']
 ${ERR_EMPLOYEE_REQUIRED}    xpath=//mat-error | //*[contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'prazdne') or contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'povinne') or contains(translate(normalize-space(.),'REQUIRED','required'),'required')][1]
+${ERR_SUBJECT_REQUIRED}     xpath=//mat-error | //*[contains(translate(normalize-space(.),'PRÁZDNEPPOVINNÉREQUIRED','prázdneppovinnérequired'),'prazd') or contains(translate(normalize-space(.),'PRÁZDNEPPOVINNÉREQUIRED','prázdneppovinnérequired'),'povin') or contains(translate(normalize-space(.),'PRÁZDNEPPOVINNÉREQUIRED','prázdneppovinnérequired'),'required')][1]
 
 # =============================================================================
 # NAVIGATION / MENU (portaladmin visibility)

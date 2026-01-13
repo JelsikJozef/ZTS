@@ -90,7 +90,7 @@ ${LINK_MANAGE_EMPLOYEES}    xpath=//div[contains(@class,'fuse-vertical-navigatio
 ${BTN_ADD_NEW_EMPLOYEE}     xpath=//button[.//span[normalize-space(.)='Pridať nového zamestnanca'] or normalize-space(.)='Pridať nového zamestnanca'] | //a[contains(@href,'new-employee') or contains(@href,'add-employee')]
 ${BTN_SUBMIT_EMPLOYEE}      xpath=//button[.//span[normalize-space(.)='Pridať zamestnanca'] or normalize-space(.)='Pridať zamestnanca' or @type='submit']
 ${ERR_EMPLOYEE_REQUIRED}    xpath=//mat-error | //*[contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'prazdne') or contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'povinne') or contains(translate(normalize-space(.),'REQUIRED','required'),'required')][1]
-${ROLE_CHECKBOX}            xpath=//mat-checkbox[.//label[contains(normalize-space(.),'${ROLE_TEXT}')]]//input[@type='checkbox'] | //mat-checkbox[.//label[contains(normalize-space(.),'${ROLE_TEXT}')]]
+${ROLE_CHECKBOX}            xpath=//mat-checkbox[.//label[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZÁÄČĎÉÍĹĽŇÓÔÖŘŔŠŤÚÝŽ','abcdefghijklmnopqrstuvwxyzáäčďéíĺľňóôöřŕšťúýž'),'__ROLE_TEXT__')]]//input[@type='checkbox'] | //label[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZÁÄČĎÉÍĹĽŇÓÔÖŘŔŠŤÚÝŽ','abcdefghijklmnopqrstuvwxyzáäčďéíĺľňóôöřŕšťúýž'),'__ROLE_TEXT__')]/preceding::input[@type='checkbox'][1] | //label[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZÁÄČĎÉÍĹĽŇÓÔÖŘŔŠŤÚÝŽ','abcdefghijklmnopqrstuvwxyzáäčďéíĺľňóôöřŕšťúýž'),'__ROLE_TEXT__')]/ancestor::mat-checkbox//input[@type='checkbox']
 ${INPUT_EMP_NAME}           xpath=//input[@id='displayName' or @formcontrolname='name' or @name='name' or @aria-label='Zobrazované meno' or @aria-label='Meno'] | //label[contains(normalize-space(.),'Zobrazované meno') or contains(normalize-space(.),'Meno')]/following::input[1]
 ${INPUT_EMP_LDAP}           xpath=//input[@id='userName' or @formcontrolname='ldap' or @name='ldap' or @aria-label='LDAP'] | //label[contains(normalize-space(.),'LDAP')]/following::input[1]
 ${INPUT_EMP_EMAIL}          xpath=//input[@id='mail' or @formcontrolname='email' or @name='email' or @aria-label='Email'] | //label[contains(normalize-space(.),'Email')]/following::input[1]
@@ -110,3 +110,6 @@ ${MENU_TIMETABLES}         xpath=//a[@href='/timetables'] | //*[self::a or self:
 # LOGIN (bočná lišta)
 # =============================================================================
 ${BTN_LOGIN_SIDEBAR}    xpath=//a[.//span[normalize-space(.)='Prihlásiť sa'] or normalize-space(.)='Prihlásiť sa' or contains(@href,'sign-in')] | //button[.//span[normalize-space(.)='Prihlásiť sa'] or normalize-space(.)='Prihlásiť sa']
+
+${FIRST_EMPLOYEE_ROW}      xpath=(//div[contains(@class,'employees-table') and .//button[contains(@class,'hover:underline')]][1]//button[contains(@class,'hover:underline')])[1]
+${BTN_SAVE_EMPLOYEE}       xpath=//button[.//span[normalize-space(.)='Uložiť zmeny'] or normalize-space(.)='Uložiť zmeny'] | //button[@type='submit' and contains(normalize-space(.),'Uložiť')]

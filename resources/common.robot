@@ -486,118 +486,37 @@ Submit Employee Form
     Click Element                    ${BTN_SUBMIT_EMPLOYEE}
 
 Verify Multi Role Not Allowed Error
-    [Documentation]    Očakáva chybu pri výbere viacerých rolí; ak sa neobjaví, reportuje BUG.
+    [Documentation]    Očakáva varovanie/validáciu pri viacerých rolách; ak nič nevidí, FAIL (BUG).
     ${err_visible}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_EMPLOYEE_MULTIROLE}    8s
     IF    ${err_visible}
         Page Should Contain Element    ${ERR_EMPLOYEE_MULTIROLE}
     ELSE
-        Take Screenshot On Failure    Očakával som validáciu pri viacerých roliach, ale nenašiel som žiadnu (BUG – formulár zrejme prešiel).
+        Capture Page Screenshot
+        Fail    BUG: Viaceré roly boli povolené a žiadna validácia sa nezobrazila.
     END
 
-###############################################################################
-# NAVIGATION – portaladmin menu visibility
-###############################################################################
+Assert Role Checked
+    [Arguments]    ${role_text}
+    ${locator}=    Replace String    ${ROLE_CHECKBOX}    ${ROLE_TEXT}    ${role_text}
+    ${is_checked}=    Run Keyword And Return Status    Element Should Be Selected    ${locator}
+    Should Be True    ${is_checked}    msg=Rola ${role_text} nie je zaškrtnutá (UI assert zlyhal).
+
+Open First Employee From Current Employees
+    [Documentation]    Otvorí prvého zamestnanca v sekcii Aktuálni zamestnanci a čaká na formulár (Uložiť zmeny).
+    Wait Until Element Is Visible    ${FIRST_EMPLOYEE_ROW}    20s
+    Scroll Element Into View         ${FIRST_EMPLOYEE_ROW}
+    Click Element                    ${FIRST_EMPLOYEE_ROW}
+    Wait Until Element Is Visible    ${BTN_SAVE_EMPLOYEE}    15s
+
+Save Employee Changes
+    Wait Until Element Is Visible    ${BTN_SAVE_EMPLOYEE}    20s
+    Scroll Element Into View         ${BTN_SAVE_EMPLOYEE}
+    Click Element                    ${BTN_SAVE_EMPLOYEE}
 
 Ensure Menu Expanded
-    [Documentation]    Pokúsi sa rozbaliť bočné menu (hamburger), ak je k dispozícii.
+    [Documentation]    Rozbalí bočné menu (hamburger), ak ešte neexistuje tento keyword v pamäti.
     ${has_toggle}=    Run Keyword And Return Status    Page Should Contain Element    ${BTN_MENU_TOGGLE}
     IF    ${has_toggle}
         Click Element    ${BTN_MENU_TOGGLE}
         Sleep    300ms
     END
-
-Verify Portaladmin Sees Articles And Infoweb
-    [Documentation]    Overí, že portaladmin vidí menu položky Články a Informačný web.
-    Ensure Menu Expanded
-    Wait Until Element Is Visible    ${MENU_ARTICLES}    15s
-    Wait Until Element Is Visible    ${MENU_INFOWEB}     15s
-    Capture Page Screenshot
-
-###############################################################################
-# LOGIN – články editor (variant TC15)
-###############################################################################
-
-# removed duplicate; use existing keyword: Login As Articles Editor
-
-###############################################################################
-# MENU VISIBILITY – articleseditor
-###############################################################################
-
-Verify Articles Visible And Infoweb Hidden
-    [Documentation]    Overí, že menu obsahuje Články a neobsahuje Informačný web.
-    Ensure Menu Expanded
-    Wait Until Element Is Visible    ${MENU_ARTICLES}    20s
-    ${infoweb_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${MENU_INFOWEB}    3s
-    Should Be Equal    ${infoweb_visible}    ${False}
-    Capture Page Screenshot
-
-Submit Subject Form
-    [Documentation]    Odoslanie formulára predmetu.
-    Wait Until Element Is Visible    ${BTN_SUBMIT_SUBJECT}    20s
-    Scroll Element Into View         ${BTN_SUBMIT_SUBJECT}
-    Click Element                    ${BTN_SUBMIT_SUBJECT}
-
-Fill Subject Form
-    [Arguments]    ${name}    ${code}    ${guarant}    ${hours}    ${credits}
-    Wait Until Element Is Visible    ${INPUT_SUBJECT_NAME}    20s
-    Clear Element Text               ${INPUT_SUBJECT_NAME}
-    Input Text                       ${INPUT_SUBJECT_NAME}    ${name}
-    Wait Until Element Is Visible    ${INPUT_SUBJECT_CODE}    20s
-    Clear Element Text               ${INPUT_SUBJECT_CODE}
-    Input Text                       ${INPUT_SUBJECT_CODE}    ${code}
-    Wait Until Element Is Visible    ${INPUT_SUBJECT_GUARANT}    20s
-    Clear Element Text               ${INPUT_SUBJECT_GUARANT}
-    Input Text                       ${INPUT_SUBJECT_GUARANT}    ${guarant}
-    Wait Until Element Is Visible    ${INPUT_SUBJECT_HOURS}    20s
-    Clear Element Text               ${INPUT_SUBJECT_HOURS}
-    Input Text                       ${INPUT_SUBJECT_HOURS}    ${hours}
-    Wait Until Element Is Visible    ${INPUT_SUBJECT_CREDITS}    20s
-    Clear Element Text               ${INPUT_SUBJECT_CREDITS}
-    Input Text                       ${INPUT_SUBJECT_CREDITS}    ${credits}
-
-Verify Credits Must Be Greater Than Zero Error
-    [Documentation]    Očakáva validačnú chybu pre kredity; ak sa neobjaví, reportuje BUG.
-    ${err_visible}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_SUBJECT_CREDITS}    8s
-    IF    ${err_visible}
-        Page Should Contain Element    ${ERR_SUBJECT_CREDITS}
-    ELSE
-        Take Screenshot On Failure    Očakával som validačnú chybu pre kredity > 0, ale neobjavila sa (BUG).
-    END
-
-Verify Hours Must Be Numeric Error
-    [Documentation]    Očakáva validačnú chybu pre pole Počet hodín; ak sa neobjaví, reportuje BUG.
-    ${err_visible}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_SUBJECT_HOURS}    8s
-    IF    ${err_visible}
-        Page Should Contain Element    ${ERR_SUBJECT_HOURS}
-    ELSE
-        Take Screenshot On Failure    Očakával som validačnú chybu pre Počet hodín (nečíselná hodnota), ale neobjavila sa (BUG).
-    END
-
-Open Timetables From Menu
-    [Documentation]    Klikne na položku Rozvrhy v menu.
-    Ensure Menu Expanded
-    Wait Until Element Is Visible    ${MENU_TIMETABLES}    20s
-    Scroll Element Into View         ${MENU_TIMETABLES}
-    Click Element                    ${MENU_TIMETABLES}
-    Wait Until Location Contains     /timetables    20s
-
-Browser Back And Verify Home
-    [Documentation]    Vykoná back a očakáva návrat na homepage; ak vidí 404/Ooops alebo zostane na /timetables, zámerne FAILne (BUG).
-    # Pokus o back cez API aj JS (SPA môže blokovať históriu)
-    Wait Until Keyword Succeeds    3x    1s    Run Keywords    Go Back    AND    Execute Javascript    window.history.back()
-    Sleep    500ms
-    ${has_404}=    Run Keyword And Return Status    Page Should Contain    Ooops
-    ${has_404b}=   Run Keyword And Return Status    Page Should Contain    404
-    ${still_timetables}=    Run Keyword And Return Status    Location Should Contain    /timetables
-    IF    ${has_404} or ${has_404b}
-        Capture Page Screenshot
-        Fail    BUG: Po návrate z /timetables sa zobrazuje 404 stránka.
-    END
-    IF    ${still_timetables}
-        Capture Page Screenshot
-        Fail    BUG: Po návrate z /timetables sme ostali na /timetables (neprešlo späť).
-    END
-    Wait Until Location Contains    ${BASE_URL}    10s
-    Page Should Not Contain   Ooops
-    Page Should Not Contain   404
-    Capture Page Screenshot

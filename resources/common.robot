@@ -448,3 +448,36 @@ Verify Articles Visible And Infoweb Hidden
     ${infoweb_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${MENU_INFOWEB}    3s
     Should Be Equal    ${infoweb_visible}    ${False}
     Capture Page Screenshot
+
+Submit Subject Form
+    [Documentation]    Odoslanie formulára predmetu.
+    Wait Until Element Is Visible    ${BTN_SUBMIT_SUBJECT}    20s
+    Scroll Element Into View         ${BTN_SUBMIT_SUBJECT}
+    Click Element                    ${BTN_SUBMIT_SUBJECT}
+
+Fill Subject Form
+    [Arguments]    ${name}    ${code}    ${guarant}    ${hours}    ${credits}
+    Wait Until Element Is Visible    ${INPUT_SUBJECT_NAME}    20s
+    Clear Element Text               ${INPUT_SUBJECT_NAME}
+    Input Text                       ${INPUT_SUBJECT_NAME}    ${name}
+    Wait Until Element Is Visible    ${INPUT_SUBJECT_CODE}    20s
+    Clear Element Text               ${INPUT_SUBJECT_CODE}
+    Input Text                       ${INPUT_SUBJECT_CODE}    ${code}
+    Wait Until Element Is Visible    ${INPUT_SUBJECT_GUARANT}    20s
+    Clear Element Text               ${INPUT_SUBJECT_GUARANT}
+    Input Text                       ${INPUT_SUBJECT_GUARANT}    ${guarant}
+    Wait Until Element Is Visible    ${INPUT_SUBJECT_HOURS}    20s
+    Clear Element Text               ${INPUT_SUBJECT_HOURS}
+    Input Text                       ${INPUT_SUBJECT_HOURS}    ${hours}
+    Wait Until Element Is Visible    ${INPUT_SUBJECT_CREDITS}    20s
+    Clear Element Text               ${INPUT_SUBJECT_CREDITS}
+    Input Text                       ${INPUT_SUBJECT_CREDITS}    ${credits}
+
+Verify Credits Must Be Greater Than Zero Error
+    [Documentation]    Očakáva validačnú chybu pre kredity; ak sa neobjaví, reportuje BUG.
+    ${err_visible}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_SUBJECT_CREDITS}    8s
+    IF    ${err_visible}
+        Page Should Contain Element    ${ERR_SUBJECT_CREDITS}
+    ELSE
+        Take Screenshot On Failure    Očakával som validačnú chybu pre kredity > 0, ale neobjavila sa (BUG).
+    END

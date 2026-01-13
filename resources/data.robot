@@ -30,3 +30,10 @@ ${EMPLOYEE_EMPTY_EMAIL}   ${EMPTY}
 ${EMPLOYEE_EMPTY_ROOM}    ${EMPTY}
 ${EMPLOYEE_EMPTY_PHONE}   ${EMPTY}
 ${MSG_EMPLOYEE_REQUIRED}  povinné
+
+${SUBJ_NAME_ZERO}    Ako správne nastaviť Váš linuxový predmet
+${SUBJ_CODE_ZERO}    1000001
+${SUBJ_GUARANT_ZERO}    doc. Ing. Miroslav Kvaššay, PhD.
+${SUBJ_HOURS_ZERO}    125
+${SUBJ_CREDITS_ZERO}    0
+${MSG_CREDITS_INVALID}    kredity

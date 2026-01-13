@@ -73,8 +73,13 @@ ${ERR_ARTICLE_EMPTY}        xpath=//mat-error | //*[contains(@class,'error') or 
 ${TAB_INFOWEB}              xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Informačný web']]//div[contains(@class,'fuse-vertical-navigation-item-title-wrapper')]
 ${LINK_MANAGE_SUBJECTS}     xpath=//div[contains(@class,'fuse-vertical-navigation-item-children')]//*[self::a or self::button][.//span[contains(normalize-space(.),'Spravovať predmety')]] | //a[(contains(@href,'subject') or contains(@href,'predmet')) and (contains(normalize-space(.),'Spravovať') or contains(normalize-space(.),'predmet'))] | //button[contains(normalize-space(.),'Spravovať predmety')]
 ${BTN_ADD_NEW_SUBJECT}      xpath=//button[.//span[normalize-space(.)='Pridať nový predmet'] or normalize-space(.)='Pridať nový predmet'] | //a[contains(@href,'new-subject') or contains(@href,'add-subject')]
-${BTN_SUBMIT_SUBJECT}       xpath=//button[.//span[normalize-space(.)='Pridať predmet'] or normalize-space(.)='Pridať predmet']
-${ERR_SUBJECT_REQUIRED}     xpath=//mat-error | //*[contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'prazdne') or contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'povinne') or contains(translate(normalize-space(.),'REQUIRED','required'),'required')][1]
+${BTN_SUBMIT_SUBJECT}       xpath=//button[.//span[normalize-space(.)='Pridať predmet'] or normalize-space(.)='Pridať predmet'] | //button[@type='submit' and contains(translate(normalize-space(.),'PRIDAT','pridat'),'pridat')]
+${INPUT_SUBJECT_NAME}       xpath=//input[@formcontrolname='name' or @name='name' or @id='name' or @aria-label='Názov predmetu' or @aria-label='Názov'] | //label[normalize-space(.)='Názov']/following::input[1]
+${INPUT_SUBJECT_CODE}       xpath=//input[@formcontrolname='code' or @name='code' or @id='code' or @aria-label='Kód'] | //label[normalize-space(.)='Kód']/following::input[1]
+${INPUT_SUBJECT_GUARANT}    xpath=//input[@formcontrolname='guarant' or @name='guarant' or @id='guarant' or @aria-label='Garant'] | //label[normalize-space(.)='Garant']/following::input[1]
+${INPUT_SUBJECT_HOURS}      xpath=//input[@formcontrolname='hours' or @name='hours' or @id='hours' or @aria-label='Počet hodín'] | //label[normalize-space(.)='Počet hodín']/following::input[1]
+${INPUT_SUBJECT_CREDITS}    xpath=//input[@formcontrolname='credits' or @name='credits' or @id='credits' or @aria-label='Kredity'] | //label[normalize-space(.)='Kredity']/following::input[1]
+${ERR_SUBJECT_CREDITS}      xpath=//label[normalize-space(.)='Kredity']/following::*[contains(@class,'mat-error') or self::mat-error][1] | //mat-error[contains(translate(normalize-space(.),'KREDITY','kredity'),'kred')]
 
 # =============================================================================
 # INFO WEB / EMPLOYEES

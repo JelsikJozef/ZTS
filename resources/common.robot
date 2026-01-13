@@ -528,12 +528,15 @@ Assert Role Checked
     # Daj UI chvíľu na dokončenie (Angular change detection po kliknutí)
     Sleep    200ms
 
+    # SeleniumLibrary keyword `Execute Javascript` nevie odovzdať JS argumenty ako WebDriver.
+    # Preto si rolu encodneme cez json.dumps do bezpečného JS string literálu.
+    ${role_json}=    Evaluate    __import__('json').dumps($role_text)
+
     ${role_checked}=    Execute Javascript
-    ...    const roleText = arguments[0];
+    ...    const wanted = ${role_json};
     ...    const norm = s => (s || '').replace(/\s+/g,' ').trim();
-    ...    const wanted = norm(roleText);
     ...    const nodes = Array.from(document.querySelectorAll('mat-checkbox, mat-mdc-checkbox'));
-    ...    const host = nodes.find(n => norm(n.textContent).includes(wanted));
+    ...    const host = nodes.find(n => norm(n.textContent).includes(norm(wanted)));
     ...    if(!host){ return {found:false, checked:false, aria:null, input:null, classes:null}; }
     ...    const aria = host.getAttribute('aria-checked');
     ...    const input = host.querySelector('input[type="checkbox"]');
@@ -542,7 +545,6 @@ Assert Role Checked
     ...    const classChecked = /mat-(mdc-)?checkbox-checked/.test(cls) || /mat-checkbox-checked/.test(cls);
     ...    const isChecked = (aria === 'true') || (inputChecked === true) || classChecked;
     ...    return {found:true, checked:isChecked, aria:aria, input:inputChecked, classes:cls};
-    ...    ${role_text}
 
     Should Be True
     ...    ${role_checked}[found]

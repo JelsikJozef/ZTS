@@ -380,3 +380,34 @@ Verify Subject Empty Fields Errors
     ELSE
         Take Screenshot On Failure    Očakával som validačnú chybu pri prázdnych poliach predmetu, ale nezobrazila sa.
     END
+
+###############################################################################
+# INFO WEB / EMPLOYEES
+###############################################################################
+
+Open Manage Employees
+    [Documentation]    Klikne na Spravovať pracovníkov a čaká na načítanie zoznamu.
+    Wait Until Element Is Visible    ${LINK_MANAGE_EMPLOYEES}    20s
+    Scroll Element Into View         ${LINK_MANAGE_EMPLOYEES}
+    Click Element                    ${LINK_MANAGE_EMPLOYEES}
+
+Open Add New Employee Form
+    [Documentation]    Klikne na Pridať nového zamestnanca.
+    Wait Until Element Is Visible    ${BTN_ADD_NEW_EMPLOYEE}    20s
+    Scroll Element Into View         ${BTN_ADD_NEW_EMPLOYEE}
+    Click Element                    ${BTN_ADD_NEW_EMPLOYEE}
+
+Submit Empty Employee
+    [Documentation]    Stlačí Pridať zamestnanca bez vyplnenia polí.
+    Wait Until Element Is Visible    ${BTN_SUBMIT_EMPLOYEE}    20s
+    Scroll Element Into View         ${BTN_SUBMIT_EMPLOYEE}
+    Click Element                    ${BTN_SUBMIT_EMPLOYEE}
+
+Verify Employee Empty Fields Errors
+    [Documentation]    Overí, že sa zobrazila validačná chyba na prázdne polia pri zamestnancovi.
+    ${has_err}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_EMPLOYEE_REQUIRED}    8s
+    IF    ${has_err}
+        Page Should Contain Element    ${ERR_EMPLOYEE_REQUIRED}
+    ELSE
+        Take Screenshot On Failure    Očakával som validačnú chybu pri prázdnych poliach zamestnanca, ale nezobrazila sa.
+    END

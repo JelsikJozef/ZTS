@@ -75,3 +75,11 @@ ${LINK_MANAGE_SUBJECTS}     xpath=//div[contains(@class,'fuse-vertical-navigatio
 ${BTN_ADD_NEW_SUBJECT}      xpath=//button[.//span[normalize-space(.)='Pridať nový predmet'] or normalize-space(.)='Pridať nový predmet'] | //a[contains(@href,'new-subject') or contains(@href,'add-subject')]
 ${BTN_SUBMIT_SUBJECT}       xpath=//button[.//span[normalize-space(.)='Pridať predmet'] or normalize-space(.)='Pridať predmet']
 ${ERR_SUBJECT_REQUIRED}     xpath=//mat-error | //*[contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'prazdne') or contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'povinne') or contains(translate(normalize-space(.),'REQUIRED','required'),'required')][1]
+
+# =============================================================================
+# INFO WEB / EMPLOYEES
+# =============================================================================
+${LINK_MANAGE_EMPLOYEES}    xpath=//div[contains(@class,'fuse-vertical-navigation-item-children')]//*[self::a or self::button][.//span[contains(normalize-space(.),'Spravovať pracovníkov')]] | //a[(contains(@href,'employee') or contains(@href,'zamest')) and contains(normalize-space(.),'Spravovať')] | //button[contains(normalize-space(.),'Spravovať pracovníkov')]
+${BTN_ADD_NEW_EMPLOYEE}     xpath=//button[.//span[normalize-space(.)='Pridať nového zamestnanca'] or normalize-space(.)='Pridať nového zamestnanca'] | //a[contains(@href,'new-employee') or contains(@href,'add-employee')]
+${BTN_SUBMIT_EMPLOYEE}      xpath=//button[.//span[normalize-space(.)='Pridať zamestnanca'] or normalize-space(.)='Pridať zamestnanca']
+${ERR_EMPLOYEE_REQUIRED}    xpath=//mat-error | //*[contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'prazdne') or contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'povinne') or contains(translate(normalize-space(.),'REQUIRED','required'),'required')][1]

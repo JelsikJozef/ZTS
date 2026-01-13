@@ -96,3 +96,8 @@ ${ERR_EMPLOYEE_REQUIRED}    xpath=//mat-error | //*[contains(translate(normalize
 ${BTN_MENU_TOGGLE}         xpath=//button[contains(@class,'mat-icon-button')][.//mat-icon[@data-mat-icon-name='menu' or contains(translate(normalize-space(.),'MENU','menu'),'menu')]] | //button[@aria-label='Menu' or @aria-label='Toggle menu']
 ${MENU_ARTICLES}           xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Články' or normalize-space(.)='Articles']]//*[contains(@class,'fuse-vertical-navigation-item-title')][1] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Články') or contains(normalize-space(.),'Articles')]
 ${MENU_INFOWEB}            xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Informačný web']]//div[contains(@class,'fuse-vertical-navigation-item-title-wrapper')] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Informačný web')]
+
+# =============================================================================
+# LOGIN (bočná lišta)
+# =============================================================================
+${BTN_LOGIN_SIDEBAR}    xpath=//a[.//span[normalize-space(.)='Prihlásiť sa'] or normalize-space(.)='Prihlásiť sa' or contains(@href,'sign-in')] | //button[.//span[normalize-space(.)='Prihlásiť sa'] or normalize-space(.)='Prihlásiť sa']

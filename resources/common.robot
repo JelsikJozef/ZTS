@@ -100,6 +100,25 @@ Verify Wrong Credentials Message
     Wait Until Page Contains    Nesprávne používateľské meno alebo heslo    20s
     Capture Page Screenshot
 
+Open Login From Left Sidebar
+    [Documentation]    Klikne na položku "Prihlásiť sa" v ľavej lište na domovskej stránke.
+    Wait Until Element Is Visible    ${BTN_LOGIN_SIDEBAR}    15s
+    Scroll Element Into View         ${BTN_LOGIN_SIDEBAR}
+    Click Element                    ${BTN_LOGIN_SIDEBAR}
+    Wait Until Page Contains         Prihlásiť sa    10s
+
+Ensure Local Login Form Visible
+    [Documentation]    Pre starší TC01 alias: zabezpečí, že lokálny login formulár je zobrazený.
+    Select Local Account Login
+
+Click Local Submit
+    [Documentation]    Pre starší TC01 alias: klikne na submit lokálneho loginu bez vyplnenia.
+    Submit Local Login
+
+Verify Required Messages
+    [Documentation]    Pre starší TC01 alias: overí povinné polia.
+    Verify Required Messages Empty Username And Password
+
 ###############################################################################
 # LOGIN FLOW PRE PROFILOVÉ TESTY
 ###############################################################################

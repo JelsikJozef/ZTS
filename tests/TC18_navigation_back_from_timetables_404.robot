@@ -5,8 +5,10 @@ Suite Teardown  Close Browser Session
 Test Tags       TC18    navigation    negative    bug
 
 *** Test Cases ***
-TC18 - Navigácia späť z Rozvrhov vedie na 404 (BUG)
-    [Documentation]    Overí, že po návrate z /timetables späť sa má otvoriť homepage; aktuálne sa zobrazí 404 → BUG.
+TC18 - Navigácia späť z Rozvrhov (BUG 404)
+    [Documentation]
+    ...    Overí, že po otvorení stránky Rozvrhy (/timetables) a návrate späť (browser back šípka vľavo)
+    ...    sa používateľ vráti na homepage (/). Aktuálne sa zobrazí „Ooops… 404!“ → BUG.
     Open Timetables From Menu
     Browser Back And Verify Home
 
@@ -14,5 +16,5 @@ TC18 - Navigácia späť z Rozvrhov vedie na 404 (BUG)
 TC18 Suite Setup
     Open Sign In Page
     Login As Portaladmin
-    Open Home Page
+    Ensure Menu Expanded
 

@@ -572,10 +572,22 @@ Save Employee Changes
     Click Element                    ${BTN_SAVE_EMPLOYEE}
 
 Ensure Menu Expanded
-    [Documentation]    Rozbalí bočné menu (hamburger), ak ešte neexistuje tento keyword v pamäti.
+    [Documentation]    Rozbalí bočné menu (hamburger), ak je dostupné. Ak toggle neexistuje, nič nerobí (t.j. menu je pravdepodobne už viditeľné).
+
+    # zobratý stav bez screenshotov/FAILu (nesmie to zbytočne špiniť log)
     ${has_toggle}=    Run Keyword And Return Status    Page Should Contain Element    ${BTN_MENU_TOGGLE}
+
+    # fallback: občas má hamburger iný markup
+    IF    not ${has_toggle}
+        ${has_toggle}=    Run Keyword And Return Status
+        ...    Page Should Contain Element
+        ...    xpath=//button[contains(@class,'mat-icon-button') and (.//mat-icon or contains(@aria-label,'Menu') or contains(@aria-label,'menu'))]
+    END
+
     IF    ${has_toggle}
-        Click Element    ${BTN_MENU_TOGGLE}
+        # Klikni takže ak je menu collapsible, rozbalí sa.
+        Run Keyword And Ignore Error    Click Element    ${BTN_MENU_TOGGLE}
+        Run Keyword And Ignore Error    Click Element    xpath=//button[contains(@class,'mat-icon-button') and (.//mat-icon or contains(@aria-label,'Menu') or contains(@aria-label,'menu'))]
         Sleep    300ms
     END
 
@@ -662,4 +674,67 @@ Verify Hours Must Be Numeric Error
     END
 
 
+Open Timetables From Menu
+    [Documentation]    Klikne v bočnom menu na "Rozvrhy" a počká na /timetables.
+    Ensure Menu Expanded
+    Wait Until Element Is Visible    ${MENU_TIMETABLES}    20s
+    Scroll Element Into View         ${MENU_TIMETABLES}
+    Click Element                    ${MENU_TIMETABLES}
+    Wait Until Location Contains     /timetables    20s
 
+Browser Back And Verify Home
+    [Documentation]    Stlačí back button v prehliadači (Selenium Go Back) a očakáva návrat na homepage; ak sa objaví 404 alebo sa nevráti na home, spraví screenshot a FAIL (odhalenie BUG).
+
+    ${before}=    Get Location
+
+    # 1) reálne browser back (ako klik na šípku vľavo v Chrome)
+    Go Back
+
+    # 2) fallback: niektoré SPA to niekedy ignorujú; skús aj history.back()
+    ${changed}=    Run Keyword And Return Status    Wait Until Keyword Succeeds    6x    500ms    Location Should Not Be    ${before}
+    IF    not ${changed}
+        Execute Javascript    window.history.back();
+        ${changed}=    Run Keyword And Return Status    Wait Until Keyword Succeeds    6x    500ms    Location Should Not Be    ${before}
+    END
+
+    # BUG: back nič neurobil alebo sme skončili na 404/not-found
+    IF    not ${changed}
+        ${still}=      Get Location
+        ${hist_len}=   Execute Javascript    return window.history.length;
+        ${ref}=        Execute Javascript    return document.referrer;
+
+        # ak URL vyzerá ako 404/not-found, reportuj bug ako 404 (bližšie k zadaniu)
+        ${looks_404}=    Run Keyword And Return Status    Should Match Regexp    ${still}    .*(/404|not-found).*
+        ${has_404txt}=   Run Keyword And Return Status    Page Should Contain    404
+        IF    ${looks_404} or ${has_404txt}
+            Capture Page Screenshot
+            Fail    BUG: Po návrate späť z /timetables sa zobrazila 404 stránka (not-found/404). URL=${still}. history.length=${hist_len}, referrer=${ref}
+        END
+
+        Capture Page Screenshot
+        Fail    BUG: Stlačenie browser back po /timetables nezmenilo URL (stále ${still}). history.length=${hist_len}, referrer=${ref}
+    END
+
+    # bug path: 404 stránka
+    ${url}=          Get Location
+    ${is_404_el}=    Run Keyword And Return Status    Page Should Contain Element    ${PAGE_404_MARKER}
+    ${is_404_txt}=   Run Keyword And Return Status    Page Should Contain    404
+    ${is_404_url}=   Run Keyword And Return Status    Should Contain    ${url}    404
+
+    IF    ${is_404_el} or ${is_404_txt} or ${is_404_url}
+        Capture Page Screenshot
+        Fail    BUG: Po návrate späť z /timetables sa zobrazila 404 stránka (Ooops/404). URL=${url}
+    END
+
+    # happy path: návrat na homepage
+    ${home_ok}=    Run Keyword And Return Status    Wait Until Location Is    ${BASE_URL}    20s
+    IF    not ${home_ok}
+        ${url_now}=    Get Location
+        Capture Page Screenshot
+        Fail    Po návrate späť z /timetables sa URL nevrátila na homepage (${BASE_URL}). Aktuálna URL=${url_now}
+    END
+
+    Wait Until Page Contains    Aktuality    20s
+    Page Should Not Contain    Ooops
+    Page Should Not Contain    404
+    Capture Page Screenshot

@@ -106,7 +106,7 @@ ${ERR_EMPLOYEE_MULTIROLE}   xpath=//mat-error[contains(translate(normalize-space
 ${BTN_MENU_TOGGLE}         xpath=//button[contains(@class,'mat-icon-button')][.//mat-icon[@data-mat-icon-name='menu' or contains(translate(normalize-space(.),'MENU','menu'),'menu')]] | //button[@aria-label='Menu' or @aria-label='Toggle menu']
 ${MENU_ARTICLES}           xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Články' or normalize-space(.)='Articles']]//*[contains(@class,'fuse-vertical-navigation-item-title')][1] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Články') or contains(normalize-space(.),'Articles')]
 ${MENU_INFOWEB}            xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Informačný web']]//div[contains(@class,'fuse-vertical-navigation-item-title-wrapper')] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Informačný web')]
-${MENU_TIMETABLES}         xpath=//a[@href='/timetables'] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Rozvrhy')]
+${MENU_TIMETABLES}         xpath=//a[@data-testid='menu-timetables' or @data-testid='timetables' or @href='/timetables' or contains(@href,'/timetables') or @routerlink='/timetables' or contains(@routerlink,'timetables')] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Rozvrhy')]
 
 # =============================================================================
 # LOGIN (bočná lišta)
@@ -120,4 +120,8 @@ ${BTN_SAVE_EMPLOYEE}       xpath=//button[.//span[normalize-space(.)='Uložiť z
 # TIMETABLES
 # =============================================================================
 ${LINK_TIMETABLES}        xpath=//a[@href='/timetables' or contains(@href,'/timetables') or @routerlink='/timetables' or contains(@routerlink,'timetables')] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Rozvrhy') or contains(normalize-space(.),'Timetables')]
-${PAGE_404_MARKER}        xpath=//*[contains(normalize-space(.),'404') or contains(normalize-space(.),'Stránka nenájdená') or contains(normalize-space(.),'Page not found')]
+
+# =============================================================================
+# NAVIGATION / BACK BUTTON (UI šípka vľavo)
+# =============================================================================
+${BTN_BACK_ARROW}    xpath=//button[@aria-label='Back' or @aria-label='Späť' or @title='Back' or @title='Späť' or @data-testid='back' or @data-testid='btn-back' or @data-testid='back-button'][1] | //button[contains(@class,'mat-icon-button')][.//mat-icon[contains(@data-mat-icon-name,'arrow') or contains(@data-mat-icon-name,'chevron-left') or contains(@data-mat-icon-name,'keyboard_arrow_left') or contains(@data-mat-icon-name,'arrow_back_ios') or contains(normalize-space(.),'arrow_back') or contains(normalize-space(.),'arrow_back_ios') or contains(normalize-space(.),'arrow_back_ios_new') or contains(normalize-space(.),'keyboard_arrow_left') or contains(normalize-space(.),'chevron_left')]][1] | //a[contains(@class,'mat-icon-button')][.//mat-icon[contains(@data-mat-icon-name,'arrow') or contains(@data-mat-icon-name,'chevron-left') or contains(@data-mat-icon-name,'keyboard_arrow_left') or contains(normalize-space(.),'arrow_back') or contains(normalize-space(.),'keyboard_arrow_left') or contains(normalize-space(.),'chevron_left')]][1] | (//header//button[contains(@class,'mat-icon-button')])[1]

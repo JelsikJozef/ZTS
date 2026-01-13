@@ -19,6 +19,7 @@ ${MSG_EMAIL_INVALID}    nesprávna adresa
 ${USER_ARTICLESEDITOR}    articleseditor
 ${PASS_ARTICLESEDITOR}    articleseditor123
 
+# Portal admin (TC18)
 ${USER_PORTALADMIN}    portaladmin
 ${PASS_PORTALADMIN}    nimdalatrop
 ${EMOJI}               🙏

@@ -404,10 +404,47 @@ Submit Empty Employee
     Click Element                    ${BTN_SUBMIT_EMPLOYEE}
 
 Verify Employee Empty Fields Errors
-    [Documentation]    Overí, že sa zobrazila validačná chyba na prázdne polia pri zamestnancovi.
+    [Documentation]    Overí, že sa zobrazila validačná chybu na prázdne polia pri zamestnancovi.
     ${has_err}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_EMPLOYEE_REQUIRED}    8s
     IF    ${has_err}
         Page Should Contain Element    ${ERR_EMPLOYEE_REQUIRED}
     ELSE
         Take Screenshot On Failure    Očakával som validačnú chybu pri prázdnych poliach zamestnanca, ale nezobrazila sa.
     END
+
+###############################################################################
+# NAVIGATION – portaladmin menu visibility
+###############################################################################
+
+Ensure Menu Expanded
+    [Documentation]    Pokúsi sa rozbaliť bočné menu (hamburger), ak je k dispozícii.
+    ${has_toggle}=    Run Keyword And Return Status    Page Should Contain Element    ${BTN_MENU_TOGGLE}
+    IF    ${has_toggle}
+        Click Element    ${BTN_MENU_TOGGLE}
+        Sleep    300ms
+    END
+
+Verify Portaladmin Sees Articles And Infoweb
+    [Documentation]    Overí, že portaladmin vidí menu položky Články a Informačný web.
+    Ensure Menu Expanded
+    Wait Until Element Is Visible    ${MENU_ARTICLES}    15s
+    Wait Until Element Is Visible    ${MENU_INFOWEB}     15s
+    Capture Page Screenshot
+
+###############################################################################
+# LOGIN – články editor (variant TC15)
+###############################################################################
+
+# removed duplicate; use existing keyword: Login As Articles Editor
+
+###############################################################################
+# MENU VISIBILITY – articleseditor
+###############################################################################
+
+Verify Articles Visible And Infoweb Hidden
+    [Documentation]    Overí, že menu obsahuje Články a neobsahuje Informačný web.
+    Ensure Menu Expanded
+    Wait Until Element Is Visible    ${MENU_ARTICLES}    20s
+    ${infoweb_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${MENU_INFOWEB}    3s
+    Should Be Equal    ${infoweb_visible}    ${False}
+    Capture Page Screenshot

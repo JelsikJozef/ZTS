@@ -83,3 +83,10 @@ ${LINK_MANAGE_EMPLOYEES}    xpath=//div[contains(@class,'fuse-vertical-navigatio
 ${BTN_ADD_NEW_EMPLOYEE}     xpath=//button[.//span[normalize-space(.)='Pridať nového zamestnanca'] or normalize-space(.)='Pridať nového zamestnanca'] | //a[contains(@href,'new-employee') or contains(@href,'add-employee')]
 ${BTN_SUBMIT_EMPLOYEE}      xpath=//button[.//span[normalize-space(.)='Pridať zamestnanca'] or normalize-space(.)='Pridať zamestnanca']
 ${ERR_EMPLOYEE_REQUIRED}    xpath=//mat-error | //*[contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'prazdne') or contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'povinne') or contains(translate(normalize-space(.),'REQUIRED','required'),'required')][1]
+
+# =============================================================================
+# NAVIGATION / MENU (portaladmin visibility)
+# =============================================================================
+${BTN_MENU_TOGGLE}         xpath=//button[contains(@class,'mat-icon-button')][.//mat-icon[@data-mat-icon-name='menu' or contains(translate(normalize-space(.),'MENU','menu'),'menu')]] | //button[@aria-label='Menu' or @aria-label='Toggle menu']
+${MENU_ARTICLES}           xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Články' or normalize-space(.)='Articles']]//*[contains(@class,'fuse-vertical-navigation-item-title')][1] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Články') or contains(normalize-space(.),'Articles')]
+${MENU_INFOWEB}            xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Informačný web']]//div[contains(@class,'fuse-vertical-navigation-item-title-wrapper')] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Informačný web')]

@@ -70,6 +70,7 @@ ${ERR_ARTICLE_EMPTY}        xpath=//mat-error | //*[contains(@class,'error') or 
 # =============================================================================
 # INFO WEB / SUBJECTS
 # =============================================================================
+${TAB_INFOWEB_ITEM}        xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Informačný web']]
 ${TAB_INFOWEB}              xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Informačný web']]//div[contains(@class,'fuse-vertical-navigation-item-title-wrapper')]
 ${LINK_MANAGE_SUBJECTS}     xpath=//div[contains(@class,'fuse-vertical-navigation-item-children')]//*[self::a or self::button][.//span[contains(normalize-space(.),'Spravovať predmety')]] | //a[(contains(@href,'subject') or contains(@href,'predmet')) and (contains(normalize-space(.),'Spravovať') or contains(normalize-space(.),'predmet'))] | //button[contains(normalize-space(.),'Spravovať predmety')]
 ${BTN_ADD_NEW_SUBJECT}      xpath=//button[.//span[normalize-space(.)='Pridať nový predmet'] or normalize-space(.)='Pridať nový predmet'] | //a[contains(@href,'new-subject') or contains(@href,'add-subject')]
@@ -87,9 +88,15 @@ ${ERR_SUBJECT_CREDITS}      xpath=//label[normalize-space(.)='Kredity']/followin
 # =============================================================================
 ${LINK_MANAGE_EMPLOYEES}    xpath=//div[contains(@class,'fuse-vertical-navigation-item-children')]//*[self::a or self::button][.//span[contains(normalize-space(.),'Spravovať pracovníkov')]] | //a[(contains(@href,'employee') or contains(@href,'zamest')) and contains(normalize-space(.),'Spravovať')] | //button[contains(normalize-space(.),'Spravovať pracovníkov')]
 ${BTN_ADD_NEW_EMPLOYEE}     xpath=//button[.//span[normalize-space(.)='Pridať nového zamestnanca'] or normalize-space(.)='Pridať nového zamestnanca'] | //a[contains(@href,'new-employee') or contains(@href,'add-employee')]
-${BTN_SUBMIT_EMPLOYEE}      xpath=//button[.//span[normalize-space(.)='Pridať zamestnanca'] or normalize-space(.)='Pridať zamestnanca']
+${BTN_SUBMIT_EMPLOYEE}      xpath=//button[.//span[normalize-space(.)='Pridať zamestnanca'] or normalize-space(.)='Pridať zamestnanca' or @type='submit']
 ${ERR_EMPLOYEE_REQUIRED}    xpath=//mat-error | //*[contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'prazdne') or contains(translate(normalize-space(.),'PRÁZDNEPVOVINÉ','prázdnepvoviné'),'povinne') or contains(translate(normalize-space(.),'REQUIRED','required'),'required')][1]
-${ERR_SUBJECT_REQUIRED}     xpath=//mat-error | //*[contains(translate(normalize-space(.),'PRÁZDNEPPOVINNÉREQUIRED','prázdneppovinnérequired'),'prazd') or contains(translate(normalize-space(.),'PRÁZDNEPPOVINNÉREQUIRED','prázdneppovinnérequired'),'povin') or contains(translate(normalize-space(.),'PRÁZDNEPPOVINNÉREQUIRED','prázdneppovinnérequired'),'required')][1]
+${ROLE_CHECKBOX}            xpath=//mat-checkbox[.//label[contains(normalize-space(.),'${ROLE_TEXT}')]]//input[@type='checkbox'] | //mat-checkbox[.//label[contains(normalize-space(.),'${ROLE_TEXT}')]]
+${INPUT_EMP_NAME}           xpath=//input[@id='displayName' or @formcontrolname='name' or @name='name' or @aria-label='Zobrazované meno' or @aria-label='Meno'] | //label[contains(normalize-space(.),'Zobrazované meno') or contains(normalize-space(.),'Meno')]/following::input[1]
+${INPUT_EMP_LDAP}           xpath=//input[@id='userName' or @formcontrolname='ldap' or @name='ldap' or @aria-label='LDAP'] | //label[contains(normalize-space(.),'LDAP')]/following::input[1]
+${INPUT_EMP_EMAIL}          xpath=//input[@id='mail' or @formcontrolname='email' or @name='email' or @aria-label='Email'] | //label[contains(normalize-space(.),'Email')]/following::input[1]
+${INPUT_EMP_ROOM}           xpath=//input[@id='roomNumber' or @formcontrolname='room' or @name='room' or @aria-label='Číslo miestnosti'] | //label[contains(normalize-space(.),'Číslo miestnosti')]/following::input[1]
+${INPUT_EMP_PHONE}          xpath=//input[@id='telephoneNumber' or @formcontrolname='telephoneNumber' or @name='telephoneNumber' or @aria-label='Telefónne číslo'] | //label[contains(normalize-space(.),'Telefón')]/following::input[1]
+${ERR_EMPLOYEE_MULTIROLE}   xpath=//mat-error[contains(translate(normalize-space(.),'ROLA','rola'),'rola')] | //*[contains(translate(normalize-space(.),'VIAC','viac'),'viac') and contains(translate(normalize-space(.),'ROL','rol'),'rol')] | //*[contains(translate(normalize-space(.),'JEDNU','jednu'),'jednu') and contains(translate(normalize-space(.),'RO','ro'),'ro')]
 
 # =============================================================================
 # NAVIGATION / MENU (portaladmin visibility)
@@ -97,6 +104,7 @@ ${ERR_SUBJECT_REQUIRED}     xpath=//mat-error | //*[contains(translate(normalize
 ${BTN_MENU_TOGGLE}         xpath=//button[contains(@class,'mat-icon-button')][.//mat-icon[@data-mat-icon-name='menu' or contains(translate(normalize-space(.),'MENU','menu'),'menu')]] | //button[@aria-label='Menu' or @aria-label='Toggle menu']
 ${MENU_ARTICLES}           xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Články' or normalize-space(.)='Articles']]//*[contains(@class,'fuse-vertical-navigation-item-title')][1] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Články') or contains(normalize-space(.),'Articles')]
 ${MENU_INFOWEB}            xpath=//div[contains(@class,'fuse-vertical-navigation-item')][.//span[normalize-space(.)='Informačný web']]//div[contains(@class,'fuse-vertical-navigation-item-title-wrapper')] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Informačný web')]
+${MENU_TIMETABLES}         xpath=//a[@href='/timetables'] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Rozvrhy')]
 
 # =============================================================================
 # LOGIN (bočná lišta)

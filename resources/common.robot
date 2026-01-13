@@ -377,11 +377,24 @@ Login As Portaladmin
 ###############################################################################
 
 Open Info Web Tab
-    [Documentation]    Otvorí záložku Informačný web (rozbalí položku v bočnom menu).
-    Wait Until Element Is Visible    ${TAB_INFOWEB}    20s
-    Scroll Element Into View         ${TAB_INFOWEB}
-    Click Element                    ${TAB_INFOWEB}
-    Sleep    500ms
+    [Documentation]    Robustne otvorí menu Informačný web (hamburger → klik na položku → čaká na podmenu subjects/employees).
+    Ensure Menu Expanded
+    Execute Javascript    window.scrollTo(0,0)
+    ${candidates}=    Create List    ${TAB_INFOWEB_ITEM}    ${TAB_INFOWEB}    ${MENU_INFOWEB}
+    FOR    ${loc}    IN    @{candidates}
+        ${visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${loc}    4s
+        IF    ${visible}
+            Scroll Element Into View    ${loc}
+            Click Element               ${loc}
+            Sleep    300ms
+            ${expanded}=    Run Keyword And Return Status    Page Should Contain Element    ${LINK_MANAGE_SUBJECTS}
+            ${expanded_emp}=    Run Keyword And Return Status    Page Should Contain Element    ${LINK_MANAGE_EMPLOYEES}
+            IF    ${expanded} or ${expanded_emp}
+                Exit For Loop
+            END
+        END
+    END
+    Wait Until Keyword Succeeds    4x    1s    Run Keyword If    ${expanded} or ${expanded_emp}    No Operation    ELSE    Page Should Contain Element    ${LINK_MANAGE_EMPLOYEES} | ${LINK_MANAGE_SUBJECTS}
 
 Open Manage Subjects
     [Documentation]    Klikne na Spravovať predmety a čaká na načítanie zoznamu.
@@ -439,6 +452,46 @@ Verify Employee Empty Fields Errors
         Page Should Contain Element    ${ERR_EMPLOYEE_REQUIRED}
     ELSE
         Take Screenshot On Failure    Očakával som validačnú chybu pri prázdnych poliach zamestnanca, ale nezobrazila sa.
+    END
+
+Fill Employee Required Fields
+    [Arguments]    ${name}    ${ldap}    ${email}
+    Wait Until Element Is Visible    ${INPUT_EMP_NAME}    20s
+    Clear Element Text               ${INPUT_EMP_NAME}
+    Input Text                       ${INPUT_EMP_NAME}    ${name}
+    Wait Until Element Is Visible    ${INPUT_EMP_LDAP}    20s
+    Clear Element Text               ${INPUT_EMP_LDAP}
+    Input Text                       ${INPUT_EMP_LDAP}    ${ldap}
+    Wait Until Element Is Visible    ${INPUT_EMP_EMAIL}    20s
+    Clear Element Text               ${INPUT_EMP_EMAIL}
+    Input Text                       ${INPUT_EMP_EMAIL}    ${email}
+    ${has_room}=    Run Keyword And Return Status    Page Should Contain Element    ${INPUT_EMP_ROOM}
+    IF    ${has_room}
+        Clear Element Text    ${INPUT_EMP_ROOM}
+    END
+    ${has_phone}=    Run Keyword And Return Status    Page Should Contain Element    ${INPUT_EMP_PHONE}
+    IF    ${has_phone}
+        Clear Element Text    ${INPUT_EMP_PHONE}
+    END
+
+Select Employee Role By Text
+    [Arguments]    ${role_text}
+    ${locator}=    Replace String    ${ROLE_CHECKBOX}    ${ROLE_TEXT}    ${role_text}
+    Wait Until Element Is Visible    ${locator}    20s
+    Click Element                    ${locator}
+
+Submit Employee Form
+    Wait Until Element Is Visible    ${BTN_SUBMIT_EMPLOYEE}    20s
+    Scroll Element Into View         ${BTN_SUBMIT_EMPLOYEE}
+    Click Element                    ${BTN_SUBMIT_EMPLOYEE}
+
+Verify Multi Role Not Allowed Error
+    [Documentation]    Očakáva chybu pri výbere viacerých rolí; ak sa neobjaví, reportuje BUG.
+    ${err_visible}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_EMPLOYEE_MULTIROLE}    8s
+    IF    ${err_visible}
+        Page Should Contain Element    ${ERR_EMPLOYEE_MULTIROLE}
+    ELSE
+        Take Screenshot On Failure    Očakával som validáciu pri viacerých roliach, ale nenašiel som žiadnu (BUG – formulár zrejme prešiel).
     END
 
 ###############################################################################

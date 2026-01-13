@@ -53,3 +53,8 @@ ${EMPTY_SUBJECT_CODE}    ${EMPTY}
 ${EMPTY_SUBJECT_GUARANT} ${EMPTY}
 ${EMPTY_SUBJECT_HOURS}   ${EMPTY}
 ${MSG_EMPTY_FIELDS}       povinné
+${EMP_NAME_MULTIROLE}     Janko Kratochviľný
+${EMP_LDAP_MULTIROLE}     kratochvilny11
+${EMP_EMAIL_MULTIROLE}    kratochvilny11@uniza.sk
+${ROLE_1}                 Vedúci katedry
+${ROLE_2}                 Doktorand

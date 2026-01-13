@@ -56,5 +56,5 @@ ${MSG_EMPTY_FIELDS}       povinné
 ${EMP_NAME_MULTIROLE}     Janko Kratochviľný
 ${EMP_LDAP_MULTIROLE}     kratochvilny11
 ${EMP_EMAIL_MULTIROLE}    kratochvilny11@uniza.sk
-${ROLE_1}                 Vedúci katedry
-${ROLE_2}                 Doktorand
+${ROLE_1}                 Je vedúci katedry
+${ROLE_2}                 Je interný doktorand

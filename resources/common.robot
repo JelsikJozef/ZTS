@@ -476,9 +476,35 @@ Fill Employee Required Fields
 
 Select Employee Role By Text
     [Arguments]    ${role_text}
-    ${locator}=    Replace String    ${ROLE_CHECKBOX}    ${ROLE_TEXT}    ${role_text}
-    Wait Until Element Is Visible    ${locator}    20s
-    Click Element                    ${locator}
+    # Počkaj na dialóg
+    Wait Until Page Contains Element    css=.mat-mdc-dialog-surface    10s
+    Sleep    500ms
+
+    # Použijem JavaScript na priame začiarknutie - Material Design checkboxy sú problematické cez Selenium
+    Execute Javascript
+    ...    const checkboxes = Array.from(document.querySelectorAll('mat-checkbox'));
+    ...    const target = checkboxes.find(cb => cb.textContent.includes('${role_text}'));
+    ...    if(target) {
+    ...        target.scrollIntoView({block:'center'});
+    ...        const input = target.querySelector('input[type="checkbox"]');
+    ...        if(input && !input.checked) {
+    ...            input.click();
+    ...        }
+    ...    }
+
+    Sleep    300ms
+
+    # Over cez JS, že je zaškrtnutý
+    ${checked}=    Execute Javascript
+    ...    const checkboxes = Array.from(document.querySelectorAll('mat-checkbox'));
+    ...    const target = checkboxes.find(cb => cb.textContent.includes('${role_text}'));
+    ...    if(target) {
+    ...        const input = target.querySelector('input[type="checkbox"]');
+    ...        return input ? input.checked : false;
+    ...    }
+    ...    return false;
+
+    Should Be True    ${checked}    msg=Checkbox pre rolu ${role_text} nebol zaškrtnutý
 
 Submit Employee Form
     Wait Until Element Is Visible    ${BTN_SUBMIT_EMPLOYEE}    20s
@@ -497,9 +523,34 @@ Verify Multi Role Not Allowed Error
 
 Assert Role Checked
     [Arguments]    ${role_text}
-    ${locator}=    Replace String    ${ROLE_CHECKBOX}    ${ROLE_TEXT}    ${role_text}
-    ${is_checked}=    Run Keyword And Return Status    Element Should Be Selected    ${locator}
-    Should Be True    ${is_checked}    msg=Rola ${role_text} nie je zaškrtnutá (UI assert zlyhal).
+    [Documentation]    Spoľahlivo overí, že rola (mat-checkbox/mat-mdc-checkbox) je zaškrtnutá. Selenium `Element Should Be Selected` býva pri Angular Material nespoľahlivé.
+
+    # Daj UI chvíľu na dokončenie (Angular change detection po kliknutí)
+    Sleep    200ms
+
+    ${role_checked}=    Execute Javascript
+    ...    const roleText = arguments[0];
+    ...    const norm = s => (s || '').replace(/\s+/g,' ').trim();
+    ...    const wanted = norm(roleText);
+    ...    const nodes = Array.from(document.querySelectorAll('mat-checkbox, mat-mdc-checkbox'));
+    ...    const host = nodes.find(n => norm(n.textContent).includes(wanted));
+    ...    if(!host){ return {found:false, checked:false, aria:null, input:null, classes:null}; }
+    ...    const aria = host.getAttribute('aria-checked');
+    ...    const input = host.querySelector('input[type="checkbox"]');
+    ...    const inputChecked = input ? !!input.checked : null;
+    ...    const cls = host.className || '';
+    ...    const classChecked = /mat-(mdc-)?checkbox-checked/.test(cls) || /mat-checkbox-checked/.test(cls);
+    ...    const isChecked = (aria === 'true') || (inputChecked === true) || classChecked;
+    ...    return {found:true, checked:isChecked, aria:aria, input:inputChecked, classes:cls};
+    ...    ${role_text}
+
+    Should Be True
+    ...    ${role_checked}[found]
+    ...    msg=Checkbox pre rolu "${role_text}" sa nenašiel.
+
+    Should Be True
+    ...    ${role_checked}[checked]
+    ...    msg=Rola ${role_text} nie je zaškrtnutá (UI assert zlyhal). Debug: aria-checked=${role_checked}[aria], input.checked=${role_checked}[input], class=${role_checked}[classes]
 
 Open First Employee From Current Employees
     [Documentation]    Otvorí prvého zamestnanca v sekcii Aktuálni zamestnanci a čaká na formulár (Uložiť zmeny).

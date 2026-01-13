@@ -83,6 +83,8 @@ ${ERR_SUBJECT_HOURS}       xpath=//label[normalize-space(.)='Počet hodín']/fol
 ${INPUT_SUBJECT_CREDITS}    xpath=//input[@formcontrolname='credits' or @name='credits' or @id='credits' or @aria-label='Kredity'] | //label[normalize-space(.)='Kredity']/following::input[1]
 ${ERR_SUBJECT_CREDITS}      xpath=//label[normalize-space(.)='Kredity']/following::*[contains(@class,'mat-error') or self::mat-error][1] | //mat-error[contains(translate(normalize-space(.),'KREDITY','kredity'),'kred')]
 
+${ERR_SUBJECT_REQUIRED}     xpath=//mat-error | //*[contains(@class,'snack-bar') or contains(@class,'snackbar') or contains(@class,'toast') or contains(@class,'alert') or contains(@class,'error') or contains(@class,'invalid')][contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'povinn') or contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'prazd') or contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'vypln') or contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'required')][1]
+
 # =============================================================================
 # INFO WEB / EMPLOYEES
 # =============================================================================
@@ -113,3 +115,9 @@ ${BTN_LOGIN_SIDEBAR}    xpath=//a[.//span[normalize-space(.)='Prihlásiť sa'] o
 
 ${FIRST_EMPLOYEE_ROW}      xpath=(//div[contains(@class,'employees-table') and .//button[contains(@class,'hover:underline')]][1]//button[contains(@class,'hover:underline')])[1]
 ${BTN_SAVE_EMPLOYEE}       xpath=//button[.//span[normalize-space(.)='Uložiť zmeny'] or normalize-space(.)='Uložiť zmeny'] | //button[@type='submit' and contains(normalize-space(.),'Uložiť')]
+
+# =============================================================================
+# TIMETABLES
+# =============================================================================
+${LINK_TIMETABLES}        xpath=//a[@href='/timetables' or contains(@href,'/timetables') or @routerlink='/timetables' or contains(@routerlink,'timetables')] | //*[self::a or self::button or self::span][contains(normalize-space(.),'Rozvrhy') or contains(normalize-space(.),'Timetables')]
+${PAGE_404_MARKER}        xpath=//*[contains(normalize-space(.),'404') or contains(normalize-space(.),'Stránka nenájdená') or contains(normalize-space(.),'Page not found')]

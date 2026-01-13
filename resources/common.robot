@@ -315,7 +315,12 @@ Verify About Me Saved
 # LOGIN – články editor
 ###############################################################################
 
-Login As Articles Editor
+Login As Articleseditor Alias
+    [Documentation]    Alias pre Login As Articleseditor (kvôli spätnej kompatibilite starších testov).
+    Login As Articleseditor
+
+Login As Articleseditor
+    [Documentation]    Prihlási sa ako articleseditor cez lokálny účet a počká na stabilný prvok (Aktuality).
     Login Local    ${USER_ARTICLESEDITOR}    ${PASS_ARTICLESEDITOR}
 
 ###############################################################################
@@ -573,3 +578,88 @@ Ensure Menu Expanded
         Click Element    ${BTN_MENU_TOGGLE}
         Sleep    300ms
     END
+
+Verify Portaladmin Sees Articles And Infoweb
+    [Documentation]    Overí, že v bočnom menu sú viditeľné položky "Články" a "Informačný web" (portaladmin).
+
+    # pre istotu drž menu otvorené (niektoré UI sa vie samo zavrieť)
+    Ensure Menu Expanded
+
+    ${articles_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${MENU_ARTICLES}    15s
+    IF    not ${articles_visible}
+        Take Screenshot On Failure    Položka menu "Články" nie je viditeľná pre portaladmin.
+    END
+
+    ${infoweb_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${MENU_INFOWEB}    15s
+    IF    not ${infoweb_visible}
+        Take Screenshot On Failure    Položka menu "Informačný web" nie je viditeľná pre portaladmin.
+    END
+
+    # finálne asserty (a screenshot do logu pre akceptačné kritérium)
+    Page Should Contain Element    ${MENU_ARTICLES}
+    Page Should Contain Element    ${MENU_INFOWEB}
+    Capture Page Screenshot
+
+Fill Subject Form
+    [Arguments]    ${name}    ${code}    ${guarant}    ${hours}    ${credits}
+    Wait Until Element Is Visible    ${INPUT_SUBJECT_NAME}    20s
+    Clear Element Text               ${INPUT_SUBJECT_NAME}
+    Input Text                       ${INPUT_SUBJECT_NAME}    ${name}
+    Wait Until Element Is Visible    ${INPUT_SUBJECT_CODE}    20s
+    Clear Element Text               ${INPUT_SUBJECT_CODE}
+    Input Text                       ${INPUT_SUBJECT_CODE}    ${code}
+    Wait Until Element Is Visible    ${INPUT_SUBJECT_GUARANT}    20s
+    Clear Element Text               ${INPUT_SUBJECT_GUARANT}
+    Input Text                       ${INPUT_SUBJECT_GUARANT}    ${guarant}
+    Wait Until Element Is Visible    ${INPUT_SUBJECT_HOURS}    20s
+    Clear Element Text               ${INPUT_SUBJECT_HOURS}
+    Input Text                       ${INPUT_SUBJECT_HOURS}    ${hours}
+    Wait Until Element Is Visible    ${INPUT_SUBJECT_CREDITS}    20s
+    Clear Element Text               ${INPUT_SUBJECT_CREDITS}
+    Input Text                       ${INPUT_SUBJECT_CREDITS}    ${credits}
+
+
+Verify Articles Visible And Infoweb Hidden
+    [Documentation]    Overí, že účet articleseditor vidí menu Články a nevidí/neexistuje Informačný web.
+    Ensure Menu Expanded
+
+    Wait Until Element Is Visible    ${MENU_ARTICLES}    20s
+
+    # Preferovaný negatívny assert: element nesmie byť vôbec v DOM
+    ${no_infoweb}=    Run Keyword And Return Status    Page Should Not Contain Element    ${MENU_INFOWEB}
+    IF    not ${no_infoweb}
+        # Fallback: ak je element v DOM ale nie je visible, stále je to FAIL pre tento test case
+        ${status}=    Run Keyword And Return Status    Page Should Contain Element    ${MENU_INFOWEB}
+        Should Be False    ${status}
+    END
+
+    Capture Page Screenshot
+
+Submit Subject Form
+    [Documentation]    Odoslanie formulára predmetu.
+    Wait Until Element Is Visible    ${BTN_SUBMIT_SUBJECT}    20s
+    Scroll Element Into View         ${BTN_SUBMIT_SUBJECT}
+    Click Element                    ${BTN_SUBMIT_SUBJECT}
+
+
+Verify Credits Must Be Greater Than Zero Error
+    [Documentation]    Očakáva validačnú chybu pre kredity; ak sa neobjaví, reportuje BUG.
+    ${err_visible}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_SUBJECT_CREDITS}    8s
+    IF    ${err_visible}
+        Page Should Contain Element    ${ERR_SUBJECT_CREDITS}
+    ELSE
+        Take Screenshot On Failure    Očakával som validačnú chybu pre kredity > 0, ale neobjavila sa (BUG).
+    END
+
+
+Verify Hours Must Be Numeric Error
+    [Documentation]    Očakáva validačnú chybu pre pole Počet hodín; ak sa neobjaví, reportuje BUG.
+    ${err_visible}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${ERR_SUBJECT_HOURS}    8s
+    IF    ${err_visible}
+        Page Should Contain Element    ${ERR_SUBJECT_HOURS}
+    ELSE
+        Take Screenshot On Failure    Očakával som validačnú chybu pre Počet hodín (nečíselná hodnota), ale neobjavila sa (BUG).
+    END
+
+
+

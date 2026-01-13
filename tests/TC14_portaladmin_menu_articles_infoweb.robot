@@ -5,7 +5,7 @@ Suite Teardown  Close Browser Session
 Test Tags       TCxx    smoke    portaladmin    access
 
 *** Test Cases ***
-TCxx - Možnosť úpravy článkov a infowebu portaladminom
+TC14 - Možnosť úpravy článkov a infowebu portaladminom
     [Documentation]
     ...    Overí, že portaladmin po prihlásení vidí menu položky "Články" a "Informačný web".
     Login As Portaladmin

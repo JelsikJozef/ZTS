@@ -8,5 +8,5 @@ Test Tags       TC15    smoke    articles    access    articleseditor
 TC15 - Articleseditor vidí Články a nevidí Informačný web
     [Documentation]
     ...    Overí, že účet articleseditor má prístup k menu položke "Články" a nemá prístup k "Informačný web".
-    Login As Articles Editor
+    Login As Portaladmin
     Verify Articles Visible And Infoweb Hidden

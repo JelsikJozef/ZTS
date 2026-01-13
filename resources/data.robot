@@ -44,3 +44,7 @@ ${SUBJ_GUARANT_NONNUM_HOURS}   Ja nie
 ${SUBJ_HOURS_NONNUM}           Aspoň jedna
 ${SUBJ_CREDITS_OK}             5
 ${MSG_HOURS_INVALID}           Počet hodín
+
+${EMPTY_TITLE}        ${EMPTY}
+${EMPTY_CONTENT}      ${EMPTY}
+${MSG_ARTICLE_EMPTY}  prázdny

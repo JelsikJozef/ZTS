@@ -183,6 +183,16 @@ Verify Phone Was Saved Bug
     END
     Capture Page Screenshot
 
+Verify Phone Saved
+    [Arguments]    ${phone}
+    [Documentation]    Refreshne nastavenia a overí, že pole Telefón obsahuje očakávané číslo.
+    Reload Page
+    Wait Until Page Contains    Nastavenia    15s
+    Wait Until Element Is Visible    ${INPUT_PHONE}    20s
+    ${value}=    Get Value    ${INPUT_PHONE}
+    Should Be Equal    ${value}    ${phone}
+    Capture Page Screenshot
+
 ###############################################################################
 # PROFIL – Email
 ###############################################################################

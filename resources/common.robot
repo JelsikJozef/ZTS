@@ -573,3 +573,31 @@ Verify Hours Must Be Numeric Error
         Take Screenshot On Failure    Očakával som validačnú chybu pre Počet hodín (nečíselná hodnota), ale neobjavila sa (BUG).
     END
 
+Open Timetables From Menu
+    [Documentation]    Klikne na položku Rozvrhy v menu.
+    Ensure Menu Expanded
+    Wait Until Element Is Visible    ${MENU_TIMETABLES}    20s
+    Scroll Element Into View         ${MENU_TIMETABLES}
+    Click Element                    ${MENU_TIMETABLES}
+    Wait Until Location Contains     /timetables    20s
+
+Browser Back And Verify Home
+    [Documentation]    Vykoná back a očakáva návrat na homepage; ak vidí 404/Ooops alebo zostane na /timetables, zámerne FAILne (BUG).
+    # Pokus o back cez API aj JS (SPA môže blokovať históriu)
+    Wait Until Keyword Succeeds    3x    1s    Run Keywords    Go Back    AND    Execute Javascript    window.history.back()
+    Sleep    500ms
+    ${has_404}=    Run Keyword And Return Status    Page Should Contain    Ooops
+    ${has_404b}=   Run Keyword And Return Status    Page Should Contain    404
+    ${still_timetables}=    Run Keyword And Return Status    Location Should Contain    /timetables
+    IF    ${has_404} or ${has_404b}
+        Capture Page Screenshot
+        Fail    BUG: Po návrate z /timetables sa zobrazuje 404 stránka.
+    END
+    IF    ${still_timetables}
+        Capture Page Screenshot
+        Fail    BUG: Po návrate z /timetables sme ostali na /timetables (neprešlo späť).
+    END
+    Wait Until Location Contains    ${BASE_URL}    10s
+    Page Should Not Contain   Ooops
+    Page Should Not Contain   404
+    Capture Page Screenshot
